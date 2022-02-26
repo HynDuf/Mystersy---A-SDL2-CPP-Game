@@ -2,6 +2,7 @@
 #include <iostream>
 #include <assert.h>
 #include <SDL_image.h>
+#include <textureManager.h>
 SDL_Texture *playerTex;
 SDL_Rect srcR, destR;
 Game::Game() {}
@@ -21,9 +22,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     assert(renderer != nullptr);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     isRunning = true;
-    SDL_Surface *tmpSurface = IMG_Load("res/player_idle.png");
-    playerTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
-    SDL_FreeSurface(tmpSurface);
+    playerTex = textureManager::loadTexture("res/player.png", renderer);
 }
 void Game::handleEvents()
 {
