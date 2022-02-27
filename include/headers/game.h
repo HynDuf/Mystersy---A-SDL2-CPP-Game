@@ -6,18 +6,18 @@
 
 class Game
 {
-    public: 
-        Game();
-        ~Game();
+public: 
+    Game();
+    ~Game();
 
-        void init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
-        void handleEvents();
-        void update();
-        void render();
-        void clean();
-        bool running() {return isRunning;}
-    private:
-        bool isRunning;
-        SDL_Window *window;
-        SDL_Renderer *renderer;
+    void Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
+    void HandleEvents();
+    void Update();
+    void Render();
+    void Clean();
+    bool Running() {return is_running;}
+private:
+    bool is_running;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 };

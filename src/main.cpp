@@ -4,26 +4,26 @@
 
 Game *game = nullptr;
 const int FPS = 60;
-const int frameMaxDelay = 1000 / FPS;
+const int FRAME_MAX_DELAY = 1000 / FPS;
 
-Uint32 frameStart;
-int frameTime;
+Uint32 frame_start;
+int frame_time;
 int main(int argc, char *argv[])
 {
     game = new Game();
-    game->init("Knighty", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
-    while (game->running())
+    game->Init("Knighty", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
+    while (game->Running())
     {
-        frameStart = SDL_GetTicks();
-        game->handleEvents();
-        game->update(); 
-        game->render();
-        frameTime = SDL_GetTicks() - frameStart;
-        if (frameTime < frameMaxDelay)
+        frame_start = SDL_GetTicks();
+        game->HandleEvents();
+        game->Update(); 
+        game->Render();
+        frame_time = SDL_GetTicks() - frame_start;
+        if (frame_time < FRAME_MAX_DELAY)
         {
-            SDL_Delay(frameMaxDelay - frameTime);
+            SDL_Delay(FRAME_MAX_DELAY - frame_time);
         }
     }
-    game->clean();
+    game->Clean();
     return 0;
 }
