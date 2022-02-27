@@ -4,7 +4,7 @@
 class GameObject 
 {
 public:
-    GameObject(const char *texture_file, SDL_Renderer *ren, int orig_xpos, int orig_ypos);
+    GameObject(const char *texture_file, int orig_xpos, int orig_ypos);
     ~GameObject();
 
     void Update();

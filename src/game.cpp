@@ -5,6 +5,7 @@
 #include <game_object.h>
 SDL_Texture *player_tex;
 GameObject *player;
+SDL_Renderer *Game::renderer = nullptr;
 Game::Game() {}
 Game::~Game() {}
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -20,8 +21,8 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     is_running = true;
-    player_tex = TextureManager::LoadTexture("res/player.png", renderer);
-    player = new GameObject("res/player.png", renderer, 0, 0);
+    player_tex = TextureManager::LoadTexture("res/player.png");
+    player = new GameObject("res/player.png", 0, 0);
 }
 void Game::HandleEvents()
 {

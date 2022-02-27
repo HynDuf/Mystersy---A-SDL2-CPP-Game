@@ -16,8 +16,8 @@ public:
     void Render();
     void Clean();
     bool Running() {return is_running;}
+    static SDL_Renderer *renderer;
 private:
     bool is_running;
     SDL_Window *window;
-    SDL_Renderer *renderer;
 };

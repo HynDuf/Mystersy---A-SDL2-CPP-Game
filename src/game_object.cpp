@@ -1,9 +1,8 @@
 #include <game_object.h>
 #include <texture_manager.h>
-GameObject::GameObject(const char *texture_file, SDL_Renderer *ren, int orig_xpos, int orig_ypos)
+GameObject::GameObject(const char *texture_file, int orig_xpos, int orig_ypos)
 {
-    renderer = ren;
-    obj_texture = TextureManager::LoadTexture(texture_file, ren);
+    obj_texture = TextureManager::LoadTexture(texture_file);
     xpos = orig_xpos;
     ypos = orig_ypos;
     dest_rec.x = xpos;
@@ -20,5 +19,5 @@ void GameObject::Update()
 
 void GameObject::Render()
 {
-    SDL_RenderCopy(renderer, obj_texture, NULL, &dest_rec);
+    SDL_RenderCopy(Game::renderer, obj_texture, NULL, &dest_rec);
 }
