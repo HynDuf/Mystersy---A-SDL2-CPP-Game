@@ -26,51 +26,47 @@ void WorldMap::UpdateMap()
 {
     if (keyboard_state[SDL_SCANCODE_A] && keyboard_state[SDL_SCANCODE_W])
     {
-        std::cout << "Left, Up\n";
         xdif -= 2;
         ydif -= 2;
         return;
     }
     if (keyboard_state[SDL_SCANCODE_D] && keyboard_state[SDL_SCANCODE_W])
     {
-        std::cout << "Right, Up\n";
         xdif += 2;
         ydif -= 2;
         return;
     }
     if (keyboard_state[SDL_SCANCODE_A] && keyboard_state[SDL_SCANCODE_S])
     {
-        std::cout << "Left, Down\n";
         xdif -= 2;
         ydif += 2;
         return;
     }
     if (keyboard_state[SDL_SCANCODE_D] && keyboard_state[SDL_SCANCODE_S])
     {
-        std::cout << "Right, Down\n";
         xdif += 2;
         ydif += 2;
         return;
     }
     if (keyboard_state[SDL_SCANCODE_W])
     {
-        std::cout << "Up\n";
         ydif -= 2;
+        return;
     }
     if (keyboard_state[SDL_SCANCODE_S])
     {
-        std::cout << "Down\n";
         ydif += 2;
+        return;
     }
     if (keyboard_state[SDL_SCANCODE_A])
     {
-        std::cout << "Left\n";
         xdif -= 2;
+        return;
     }
     if (keyboard_state[SDL_SCANCODE_D])
     {
-        std::cout << "Right\n";
         xdif += 2;
+        return;
     }
 }
 
@@ -79,8 +75,8 @@ void WorldMap::RenderMap()
     int x_left = -((xdif % 32 + 32) % 32);
 
     int y_left = -((ydif % 32 + 32) % 32);
-    int X_tile = (xdif / 32) + (x_left == 0 ? 0 : (xdif < 0 ? -1 : 0));
-    int Y_tile = (ydif / 32) + (y_left == 0 ? 0 : (ydif < 0 ? -1 : 0));
+    int X_tile = (xdif / 32) + ((x_left != 0 && xdif < 0) ? -1 : 0);
+    int Y_tile = (ydif / 32) + ((y_left != 0 && ydif < 0) ? -1 : 0);
     for (int x = x_left, x_tile = X_tile; x < 800; x += 32, x_tile++)
         for (int y = y_left, y_tile = Y_tile; y < 640; y += 32, y_tile++)
     {
@@ -93,10 +89,3 @@ void WorldMap::RenderMap()
     }
 }
 
-// phát triển ứng dụng di động - thầy Tân
-// thiết kế giao diện người dùng - cô Duyên
-// kho dữ liệu, các hệ thống thương mại điện tử - thầy Quang Hưng
-// quản trị mạng - Dương Lê Minh
-// các vấn đề hiện đại cntt, kiểm thử - cô Trang
-// AI - Vinh
-// nguyên lí hệ điều hành - Trần Mai Vũ
