@@ -7,17 +7,17 @@ GameObject::GameObject(const char *texture_file, int orig_xpos, int orig_ypos)
     ypos = orig_ypos;
     dest_rec.x = xpos;
     dest_rec.y = ypos;
+    dest_rec.h = 60;
+    dest_rec.w = 60;
 }
 
 void GameObject::Update()
 {
-    dest_rec.h = 60;
-    dest_rec.w = 60;
     dest_rec.x++;
     dest_rec.y++;
 }
 
 void GameObject::Render()
 {
-    SDL_RenderCopy(Game::renderer, obj_texture, NULL, &dest_rec);
+    TextureManager::Draw(obj_texture, dest_rec);
 }

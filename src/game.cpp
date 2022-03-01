@@ -3,9 +3,11 @@
 #include <SDL_image.h>
 #include <texture_manager.h>
 #include <game_object.h>
+#include <world_map.h>
 SDL_Texture *player_tex;
 GameObject *player;
 SDL_Renderer *Game::renderer = nullptr;
+WorldMap *map;
 Game::Game() {}
 Game::~Game() {}
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -21,8 +23,8 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     is_running = true;
-    player_tex = TextureManager::LoadTexture("res/player.png");
-    player = new GameObject("res/player.png", 0, 0);
+    player = new GameObject("res/player.png", 370, 290);
+    map = new WorldMap();
 }
 void Game::HandleEvents()
 {
@@ -36,15 +38,19 @@ void Game::HandleEvents()
         default:
             break;
     }
+    SDL_PumpEvents();
+
 }
 void Game::Update()
 {
-    player->Update();
+    // player->Update();
+    map->UpdateMap();
 }
 void Game::Render()
 {
     SDL_RenderClear(renderer);
     // Render something here
+    map->RenderMap();
     player->Render();
     SDL_RenderPresent(renderer);
 }
