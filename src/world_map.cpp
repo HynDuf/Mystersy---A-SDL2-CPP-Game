@@ -1,6 +1,5 @@
 #include <world_map.h>
-
-const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
+#include <game.h>
 WorldMap::WorldMap()
 {
     grass[0] = TextureManager::LoadTexture("res/grass_00.png");
@@ -13,7 +12,9 @@ WorldMap::WorldMap()
 }
 
 WorldMap::~WorldMap()
-{}
+{
+    for (int i = 0; i < 6; i++) SDL_DestroyTexture(grass[i]);
+}
 
 int WorldMap::GetTileType(int x, int y)
 {
@@ -24,46 +25,46 @@ int WorldMap::GetTileType(int x, int y)
 
 void WorldMap::UpdateMap()
 {
-    if (keyboard_state[SDL_SCANCODE_A] && keyboard_state[SDL_SCANCODE_W])
+    if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])
     {
         xdif -= 2;
         ydif -= 2;
         return;
     }
-    if (keyboard_state[SDL_SCANCODE_D] && keyboard_state[SDL_SCANCODE_W])
+    if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_W])
     {
         xdif += 2;
         ydif -= 2;
         return;
     }
-    if (keyboard_state[SDL_SCANCODE_A] && keyboard_state[SDL_SCANCODE_S])
+    if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_S])
     {
         xdif -= 2;
         ydif += 2;
         return;
     }
-    if (keyboard_state[SDL_SCANCODE_D] && keyboard_state[SDL_SCANCODE_S])
+    if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_S])
     {
         xdif += 2;
         ydif += 2;
         return;
     }
-    if (keyboard_state[SDL_SCANCODE_W])
+    if (Game::keyboard_state[SDL_SCANCODE_W])
     {
         ydif -= 2;
         return;
     }
-    if (keyboard_state[SDL_SCANCODE_S])
+    if (Game::keyboard_state[SDL_SCANCODE_S])
     {
         ydif += 2;
         return;
     }
-    if (keyboard_state[SDL_SCANCODE_A])
+    if (Game::keyboard_state[SDL_SCANCODE_A])
     {
         xdif -= 2;
         return;
     }
-    if (keyboard_state[SDL_SCANCODE_D])
+    if (Game::keyboard_state[SDL_SCANCODE_D])
     {
         xdif += 2;
         return;
@@ -80,7 +81,7 @@ void WorldMap::RenderMap()
     for (int x = x_left, x_tile = X_tile; x < 800; x += 32, x_tile++)
         for (int y = y_left, y_tile = Y_tile; y < 640; y += 32, y_tile++)
     {
-        int tile_type = WorldMap::GetTileType(x_tile, y_tile);
+        int tile_type = GetTileType(x_tile, y_tile);
         tmp_dest.h = tmp_dest.w = 32;
         tmp_dest.x = x;
         tmp_dest.y = y;

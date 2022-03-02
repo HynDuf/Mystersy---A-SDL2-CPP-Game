@@ -17,6 +17,7 @@ public:
     bool Running() {return is_running;}
     static SDL_Renderer *renderer;
     static SDL_Event event;
+    static const Uint8 *keyboard_state;
     
     
 private:

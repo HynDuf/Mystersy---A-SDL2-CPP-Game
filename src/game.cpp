@@ -10,6 +10,8 @@ SDL_Renderer *Game::renderer = nullptr;
 WorldMap *map;
 Game::Game() {}
 Game::~Game() {}
+const Uint8 *Game::keyboard_state = SDL_GetKeyboardState(NULL);
+
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
     int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
