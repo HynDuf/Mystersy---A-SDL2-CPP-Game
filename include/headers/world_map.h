@@ -14,7 +14,6 @@ public:
     void UpdateMap();
     void RenderMap();
 private:
-    std::mt19937 rng;
     int xdif, ydif;
     SDL_Rect tmp_src, tmp_dest;
     std::array<SDL_Texture*, 6> grass;

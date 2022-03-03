@@ -6,7 +6,6 @@ const int FPS = 60;
 const int FRAME_MAX_DELAY = 1000 / FPS;
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 640;
-const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
 Game *game = nullptr;
 Uint32 frame_start;
 int frame_time;

@@ -1,13 +1,15 @@
 #include <world_map.h>
 #include <game.h>
+#include <perlin_noise.h>
+PerlinNoise *perlin_noise = new PerlinNoise();
 WorldMap::WorldMap()
 {
-    grass[0] = TextureManager::LoadTexture("res/grass_00.png");
-    grass[1] = TextureManager::LoadTexture("res/grass_01.png");
-    grass[2] = TextureManager::LoadTexture("res/grass_10.png");
-    grass[3] = TextureManager::LoadTexture("res/grass_11.png");
+    grass[0] = TextureManager::LoadTexture("res/deep_water_0.png");
+    grass[1] = TextureManager::LoadTexture("res/water_0.png");
+    grass[2] = TextureManager::LoadTexture("res/grass_00.png");
+    grass[3] = TextureManager::LoadTexture("res/grass_21.png");
     grass[4] = TextureManager::LoadTexture("res/grass_20.png");
-    grass[5] = TextureManager::LoadTexture("res/grass_21.png");
+    grass[5] = TextureManager::LoadTexture("res/rock_0.png");
     xdif = ydif = 0;
 }
 
@@ -18,9 +20,17 @@ WorldMap::~WorldMap()
 
 int WorldMap::GetTileType(int x, int y)
 {
-    uint32_t tile_seed = x * 31 + y * 71 + x * y;
-    rng.seed(tile_seed);
-    return rng() % 6;
+    double val = perlin_noise->GetPerlinNoise2D(x, y);
+    // std::cout << val << '\n';
+    if (val < 0.001) 
+        return 0;
+    if (val < 0.15) 
+        return 1;
+    if (val < 0.7) 
+        return 2;
+    if (val < 0.985) 
+        return (x & 1) ? 3 : 4;
+    return 5;
 }
 
 void WorldMap::UpdateMap()
@@ -85,7 +95,8 @@ void WorldMap::RenderMap()
         tmp_dest.h = tmp_dest.w = 32;
         tmp_dest.x = x;
         tmp_dest.y = y;
-            
+        if (tile_type == 5)
+            TextureManager::Draw(grass[4], tmp_dest);
         TextureManager::Draw(grass[tile_type], tmp_dest);
     }
 }
