@@ -1,7 +1,14 @@
 #include <perlin_noise.h>
-std::mt19937 rng(std::random_device{}());
 
-PerlinNoise::PerlinNoise() {}
+PerlinNoise::PerlinNoise() 
+{
+    srand(time(NULL));
+    seed = rand();
+}
+PerlinNoise::PerlinNoise(int _seed) 
+{
+    seed = _seed;
+}
 PerlinNoise::~PerlinNoise() {}
 
 double PerlinNoise::DotProduct(const vector2 &V1, const vector2 &V2)
@@ -13,7 +20,7 @@ vector2 PerlinNoise::RandomGradient(int ix, int iy) {
     // No precomputed gradients mean this works for any number of grid coordinates
     const unsigned w = 8 * sizeof(unsigned);
     const unsigned s = w / 2; // rotation width
-    unsigned a = ix, b = iy;
+    unsigned a = ix * seed, b = iy * seed;
     a *= 3284157443; b ^= a << s | a >> w-s;
     b *= 1911520717; a ^= b << s | b >> w-s;
     a *= 2048419325;

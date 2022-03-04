@@ -2,13 +2,13 @@
 
 #include <cmath>
 #include <random>
-#include <algorithm>
 
 using vector2 = std::pair<double, double>;
 class PerlinNoise
 {
 public:
     PerlinNoise();
+    PerlinNoise(int _seed); 
     ~PerlinNoise();
     double GetPerlinNoise2D(double x, double y); // With fractal brownian motion
 private:
@@ -17,5 +17,5 @@ private:
     double Fade(double t);
     double Interpolate(double t, double a1, double a2);
     double GetRawPerlinNoise2D(double x, double y);
-    
+    unsigned seed;
 };  

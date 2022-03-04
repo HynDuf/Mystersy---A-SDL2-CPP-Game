@@ -6,7 +6,7 @@ WorldMap::WorldMap()
 {
     grass[0] = TextureManager::LoadTexture("res/deep_water_0.png");
     grass[1] = TextureManager::LoadTexture("res/water_0.png");
-    grass[2] = TextureManager::LoadTexture("res/grass_00.png");
+    grass[2] = TextureManager::LoadTexture("res/grass_10.png");
     grass[3] = TextureManager::LoadTexture("res/grass_21.png");
     grass[4] = TextureManager::LoadTexture("res/grass_20.png");
     grass[5] = TextureManager::LoadTexture("res/rock_0.png");
@@ -22,9 +22,9 @@ int WorldMap::GetTileType(int x, int y)
 {
     double val = perlin_noise->GetPerlinNoise2D(x, y);
     if (val < 0 || val > 1)
-    if (val < 0.05) 
+    if (val < 0.08) 
         return 0;
-    if (val < 0.2) 
+    if (val < 0.25) 
         return 1;
     if (val < 0.7) 
         return 2;
