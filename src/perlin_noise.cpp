@@ -1,37 +1,27 @@
 #include <perlin_noise.h>
 std::mt19937 rng(std::random_device{}());
 
-PerlinNoise::PerlinNoise()
-{
-    PerlinNoise::MakePermutation();
-}
+PerlinNoise::PerlinNoise() {}
 PerlinNoise::~PerlinNoise() {}
 
-double PerlinNoise::DotProduct(const std::pair<double, double> &V1, const std::pair<double, double> &V2)
+double PerlinNoise::DotProduct(const vector2 &V1, const vector2 &V2)
 {
     return V1.first * V2.first + V1.second * V2.second;
 }
-
-void PerlinNoise::MakePermutation()
-{
-    for (int i = 0; i < (1 << 18); i++) 
-        p.push_back(i);
-    shuffle(p.begin(), p.end(), rng);
-    for (int i = 0; i < (1 << 18); i++) 
-        p.push_back(p[i]);
-}
-
-std::pair<double, double> PerlinNoise::GetConstantVector(int v)
-{
-    int rem = v & 3;
-    if (rem == 0)
-        return {1.0, 1.0};
-    else if (rem == 1)
-        return {-1.0, 1.0};
-    else if (rem == 2)
-        return {-1.0, -1.0};
-    else
-        return {1.0, -1.0};
+// Get this from wiki
+vector2 PerlinNoise::RandomGradient(int ix, int iy) {
+    // No precomputed gradients mean this works for any number of grid coordinates
+    const unsigned w = 8 * sizeof(unsigned);
+    const unsigned s = w / 2; // rotation width
+    unsigned a = ix, b = iy;
+    a *= 3284157443; b ^= a << s | a >> w-s;
+    b *= 1911520717; a ^= b << s | b >> w-s;
+    a *= 2048419325;
+    float random = a * (3.14159265 / ~(~0u >> 1)); // in [0, 2*Pi]
+    vector2 v;
+    v.first = cos(random); 
+    v.second = sin(random);
+    return v;
 }
 
 double PerlinNoise::Fade(double t)
@@ -46,51 +36,50 @@ double PerlinNoise::Interpolate(double t, double a1, double a2)
 
 double PerlinNoise::GetRawPerlinNoise2D(double x, double y)
 {
-    int X = ((int) floor(x)) & ((1 << 18) - 1);
-    int Y = ((int) floor(y)) & ((1 << 18) - 1);
+    int X = ((int) floor(x));
+    int Y = ((int) floor(y));
 
     double xf = x - ((int) floor(x));
     double yf = y - ((int) floor(y));
 
-    std::pair<double, double> topRight = std::make_pair(xf - 1.0, yf - 1.0);
-    std::pair<double, double> topLeft = std::make_pair(xf, yf - 1.0);
-    std::pair<double, double> bottomRight = std::make_pair(xf - 1.0, yf);
-    std::pair<double, double> bottomLeft = std::make_pair(xf, yf);
+    vector2 topRight = std::make_pair(xf - 1.0, yf - 1.0);
+    vector2 topLeft = std::make_pair(xf, yf - 1.0);
+    vector2 bottomRight = std::make_pair(xf - 1.0, yf);
+    vector2 bottomLeft = std::make_pair(xf, yf);
 
-    int valueTopRight = p[p[X + 1] + Y + 1];
-    int valueTopLeft = p[p[X] + Y + 1];
-    int valueBottomRight = p[p[X + 1] + Y];
-    int valueBottomLeft = p[p[X] + Y];
-
-    double dotTopRight = DotProduct(topRight, GetConstantVector(valueTopRight));
-    double dotTopLeft = DotProduct(topLeft, GetConstantVector(valueTopLeft));
-    double dotBottomRight = DotProduct(bottomRight, GetConstantVector(valueBottomRight));
-    double dotBottomLeft = DotProduct(bottomLeft, GetConstantVector(valueBottomLeft));
+    double dotTopRight = DotProduct(topRight, RandomGradient(X + 1, Y + 1));
+    double dotTopLeft = DotProduct(topLeft, RandomGradient(X, Y + 1));
+    double dotBottomRight = DotProduct(bottomRight, RandomGradient(X, Y + 1));
+    double dotBottomLeft = DotProduct(bottomLeft, RandomGradient(X, Y));
 
     double u = Fade(xf);
     double v = Fade(yf);
 
-    return Interpolate(u, Interpolate(v, dotBottomLeft, dotTopLeft), Interpolate(v, dotBottomRight, dotTopRight));
-    // return value in [-1.0, 1.0]
+    return Interpolate(u, 
+                        Interpolate(v, dotBottomLeft, dotTopLeft), 
+                        Interpolate(v, dotBottomRight, dotTopRight));
+    // return value approximately in [-1.0, 1.0]
+    // due to double imprecision
 }
 
 double PerlinNoise::GetPerlinNoise2D(double x, double y)
 {
     double ret = 0;
     double magnitude = 2;
-    double frequency = 0.001;
-
-    for (int o = 0; o < 8; o++)
+    double frequency = 0.08;
+    // With fractal brownian motion - only 2 here - increase for terrain complexity
+    for (int o = 0; o < 2; o++)
     {
         double tmp = magnitude * GetRawPerlinNoise2D(x * frequency, y * frequency);
         ret += tmp;
-        magnitude *= 0.5;
-        frequency *= 2.0;
+        magnitude /= 2;
+        frequency += frequency;
     }
 
     // scale from [-1, 1] to [0, 1]
+    // Just approximately in that range (due to double imprecision)
     ret += 1.0;
-    ret *= 0.5;
+    ret /= 2;
 
     return ret;
 }

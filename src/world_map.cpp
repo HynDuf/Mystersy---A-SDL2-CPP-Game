@@ -21,14 +21,14 @@ WorldMap::~WorldMap()
 int WorldMap::GetTileType(int x, int y)
 {
     double val = perlin_noise->GetPerlinNoise2D(x, y);
-    // std::cout << val << '\n';
-    if (val < 0.001) 
+    if (val < 0 || val > 1)
+    if (val < 0.05) 
         return 0;
-    if (val < 0.15) 
+    if (val < 0.2) 
         return 1;
     if (val < 0.7) 
         return 2;
-    if (val < 0.985) 
+    if (val < 0.95) 
         return (x & 1) ? 3 : 4;
     return 5;
 }
