@@ -11,6 +11,8 @@ WorldMap::WorldMap()
     grass[4] = TextureManager::LoadTexture("res/grass_20.png");
     grass[5] = TextureManager::LoadTexture("res/rock_0.png");
     xdif = ydif = 0;
+    tmp_src.x = tmp_src.y = 0;
+    tmp_src.h = tmp_src.w = 32;
 }
 
 WorldMap::~WorldMap()
@@ -21,14 +23,13 @@ WorldMap::~WorldMap()
 int WorldMap::GetTileType(int x, int y)
 {
     double val = perlin_noise->GetPerlinNoise2D(x, y);
-    if (val < 0 || val > 1)
-    if (val < 0.08) 
+    if (val < 0.09) 
         return 0;
-    if (val < 0.25) 
+    if (val < 0.27) 
         return 1;
-    if (val < 0.7) 
+    if (val < 0.75) 
         return 2;
-    if (val < 0.95) 
+    if (val < 0.92) 
         return (x & 1) ? 3 : 4;
     return 5;
 }
@@ -96,8 +97,8 @@ void WorldMap::RenderMap()
         tmp_dest.x = x;
         tmp_dest.y = y;
         if (tile_type == 5)
-            TextureManager::Draw(grass[4], tmp_dest);
-        TextureManager::Draw(grass[tile_type], tmp_dest);
+            TextureManager::Draw(grass[4], tmp_src, tmp_dest);
+        TextureManager::Draw(grass[tile_type], tmp_src, tmp_dest);
     }
 }
 

@@ -5,7 +5,7 @@ PerlinNoise::PerlinNoise()
     srand(time(NULL));
     seed = rand();
 }
-PerlinNoise::PerlinNoise(int _seed) 
+PerlinNoise::PerlinNoise(unsigned _seed) 
 {
     seed = _seed;
 }
@@ -36,9 +36,15 @@ double PerlinNoise::Fade(double t)
     return ((6 * t - 15) * t + 10) * t * t * t;
 }
 
-double PerlinNoise::Interpolate(double t, double a1, double a2)
+double PerlinNoise::Interpolate(double w, double a0, double a1)
 {
-    return a1 + (a2 - a1) * t;
+    // return a0 + (a1 - a0) * w;
+
+    // Use this cubic interpolation [[Smoothstep]] instead, for a smooth appearance:
+    // return (a1 - a0) * (3.0 - w * 2.0) * w * w + a0;
+
+    // Use [[Smootherstep]] for an even smoother result with a second derivative equal to zero on boundaries:
+    return (a1 - a0) * ((w * (w * 6.0 - 15.0) + 10.0) * w * w * w) + a0;
 }
 
 double PerlinNoise::GetRawPerlinNoise2D(double x, double y)
@@ -46,8 +52,8 @@ double PerlinNoise::GetRawPerlinNoise2D(double x, double y)
     int X = ((int) floor(x));
     int Y = ((int) floor(y));
 
-    double xf = x - ((int) floor(x));
-    double yf = y - ((int) floor(y));
+    double xf = x - (double) X;
+    double yf = y - (double) Y;
 
     vector2 topRight = std::make_pair(xf - 1.0, yf - 1.0);
     vector2 topLeft = std::make_pair(xf, yf - 1.0);
@@ -59,8 +65,8 @@ double PerlinNoise::GetRawPerlinNoise2D(double x, double y)
     double dotBottomRight = DotProduct(bottomRight, RandomGradient(X, Y + 1));
     double dotBottomLeft = DotProduct(bottomLeft, RandomGradient(X, Y));
 
-    double u = Fade(xf);
-    double v = Fade(yf);
+    double u = xf;
+    double v = yf;
 
     return Interpolate(u, 
                         Interpolate(v, dotBottomLeft, dotTopLeft), 
@@ -74,8 +80,8 @@ double PerlinNoise::GetPerlinNoise2D(double x, double y)
     double ret = 0;
     double magnitude = 2;
     double frequency = 0.08;
-    // With fractal brownian motion - only 2 here - increase for terrain complexity
-    for (int o = 0; o < 2; o++)
+    // With fractal brownian motion - only 1 here - increase for terrain complexity
+    for (int o = 0; o < 1; o++)
     {
         double tmp = magnitude * GetRawPerlinNoise2D(x * frequency, y * frequency);
         ret += tmp;

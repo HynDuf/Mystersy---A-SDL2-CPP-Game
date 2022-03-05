@@ -14,6 +14,6 @@ private:
     int ypos;
 
     SDL_Texture *obj_texture;
-    SDL_Rect src_rect, dest_rec;
+    SDL_Rect src_rect, dest_rect;
     SDL_Renderer *renderer;
 };

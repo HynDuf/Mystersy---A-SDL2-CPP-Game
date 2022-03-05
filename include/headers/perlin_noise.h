@@ -8,7 +8,7 @@ class PerlinNoise
 {
 public:
     PerlinNoise();
-    PerlinNoise(int _seed); 
+    PerlinNoise(unsigned _seed); 
     ~PerlinNoise();
     double GetPerlinNoise2D(double x, double y); // With fractal brownian motion
 private:
