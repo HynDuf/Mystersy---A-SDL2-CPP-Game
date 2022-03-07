@@ -1,9 +1,11 @@
 #include <world_map.h>
 #include <game.h>
 #include <perlin_noise.h>
+
 PerlinNoise *perlin_noise = new PerlinNoise();
-WorldMap::WorldMap()
+WorldMap::WorldMap(PlayerManager *_player)
 {
+    player_tmp = _player;
     grass[0] = TextureManager::LoadTexture("res/deep_water_0.png");
     grass[1] = TextureManager::LoadTexture("res/water_0.png");
     grass[2] = TextureManager::LoadTexture("res/grass_10.png");
@@ -36,48 +38,50 @@ int WorldMap::GetTileType(int x, int y)
 
 void WorldMap::UpdateMap()
 {
+    
+    player_tmp->sprite->ApplyAnimation("idle");
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])
     {
-        xdif -= 2;
-        ydif -= 2;
+        xdif -= player_tmp->transform->speed;
+        ydif -= player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_W])
     {
-        xdif += 2;
-        ydif -= 2;
+        xdif += player_tmp->transform->speed;
+        ydif -= player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_S])
     {
-        xdif -= 2;
-        ydif += 2;
+        xdif -= player_tmp->transform->speed;
+        ydif += player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_S])
     {
-        xdif += 2;
-        ydif += 2;
+        xdif += player_tmp->transform->speed;
+        ydif += player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_W])
     {
-        ydif -= 2;
+        ydif -= player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_S])
     {
-        ydif += 2;
+        ydif += player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A])
     {
-        xdif -= 2;
+        xdif -= player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D])
     {
-        xdif += 2;
+        xdif += player_tmp->transform->speed;
         return;
     }
 }

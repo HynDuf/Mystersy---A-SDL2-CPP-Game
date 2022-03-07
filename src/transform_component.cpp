@@ -1,6 +1,6 @@
 #include <transform_component.h>
 
-TransformComponent::TransformComponent(int _x, int _y, int _speed, int _h, int _w)
+TransformComponent::TransformComponent(int _x, int _y, int _speed, int _w, int _h)
 {
     x = _x;
     y = _y;

@@ -10,7 +10,7 @@ public:
     int vx, vy;
 
     int h, w;
-    TransformComponent(int _x, int _y, int _speed, int _h, int _w);
+    TransformComponent(int _x, int _y, int _speed, int _w, int _h);
     ~TransformComponent();
     void Update();
     void SetDir(int _vx, int _vy);

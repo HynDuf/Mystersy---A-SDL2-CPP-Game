@@ -2,10 +2,11 @@
 #include <iostream>
 #include <SDL_image.h>
 #include <texture_manager.h>
-#include <game_object.h>
+#include <player_manager.h>
+
 #include <world_map.h>
+PlayerManager *player;
 SDL_Texture *player_tex;
-GameObject *player;
 SDL_Renderer *Game::renderer = nullptr;
 WorldMap *map;
 Game::Game() {}
@@ -25,8 +26,8 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     is_running = true;
-    player = new GameObject("res/player.png", 370, 290);
-    map = new WorldMap();
+    player = new PlayerManager(370, 290, "res/player_idle_right_17x21.png");
+    map = new WorldMap(player);
 }
 void Game::HandleEvents()
 {
@@ -45,7 +46,7 @@ void Game::HandleEvents()
 }
 void Game::Update()
 {
-    // player->Update();
+    player->Update();
     map->UpdateMap();
 }
 void Game::Render()
