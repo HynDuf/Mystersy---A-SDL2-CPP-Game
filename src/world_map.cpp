@@ -39,27 +39,42 @@ int WorldMap::GetTileType(int x, int y)
 void WorldMap::UpdateMap()
 {
     
-    player_tmp->sprite->ApplyAnimation("idle");
+    if (Game::keyboard_state[SDL_SCANCODE_F])
+    {
+        if (player_tmp->direction)
+            player_tmp->sprite->ApplyAnimation("sword_right");
+        else 
+            player_tmp->sprite->ApplyAnimation("sword_left");
+        return;
+    }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])
     {
+        player_tmp->direction = 0;
+        player_tmp->sprite->ApplyAnimation("walk_left");
         xdif -= player_tmp->transform->speed;
         ydif -= player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_W])
     {
+        player_tmp->direction = 1;
+        player_tmp->sprite->ApplyAnimation("walk_right");
         xdif += player_tmp->transform->speed;
         ydif -= player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_S])
     {
+        player_tmp->direction = 0;
+        player_tmp->sprite->ApplyAnimation("walk_left");
         xdif -= player_tmp->transform->speed;
         ydif += player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_S])
     {
+        player_tmp->direction = 1;
+        player_tmp->sprite->ApplyAnimation("walk_right");
         xdif += player_tmp->transform->speed;
         ydif += player_tmp->transform->speed;
         return;
@@ -76,14 +91,22 @@ void WorldMap::UpdateMap()
     }
     if (Game::keyboard_state[SDL_SCANCODE_A])
     {
+        player_tmp->direction = 0;
+        player_tmp->sprite->ApplyAnimation("walk_left");
         xdif -= player_tmp->transform->speed;
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D])
     {
+        player_tmp->direction = 1;
+        player_tmp->sprite->ApplyAnimation("walk_right");
         xdif += player_tmp->transform->speed;
         return;
     }
+    if (player_tmp->direction)
+        player_tmp->sprite->ApplyAnimation("idle_right");
+    else 
+        player_tmp->sprite->ApplyAnimation("idle_left");
 }
 
 void WorldMap::RenderMap()

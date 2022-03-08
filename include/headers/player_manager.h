@@ -14,4 +14,7 @@ public:
     void Render();
     SpriteComponent *sprite;
     TransformComponent *transform;
+
+    // 1 is right, 0 is left
+    bool direction;
 };
