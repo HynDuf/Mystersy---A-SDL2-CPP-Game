@@ -2,7 +2,7 @@
 #include <texture_manager.h>
 PlayerManager::PlayerManager(int orig_x, int orig_y, const char *texture_file)
 {
-    transform = new TransformComponent(orig_x, orig_y, 2, 45, 50);
+    transform = new TransformComponent(orig_x, orig_y, 2, 70, 45);
     sprite = new SpriteComponent(texture_file, transform);
     direction = 1;
     AddAnimations();
@@ -21,10 +21,10 @@ void PlayerManager::Render()
 
 void PlayerManager::AddAnimations()
 {
-    Animation walk_right(0, 17, 21, 4, 200);
-    Animation walk_left(21, 17, 21, 4, 200);
-    Animation sword_right(42, 25, 20, 3, 200);
-    Animation sword_left(62, 25, 20, 3, 200);
+    Animation walk_right(0, 33, 21, 4, 200);
+    Animation walk_left(21, 33, 21, 4, 200);
+    Animation sword_right(42, 33, 21, 3, 100);
+    Animation sword_left(63, 33, 21, 3, 100);
     sprite->animations_map["idle_right"] = walk_right;
     sprite->animations_map["idle_left"] = walk_left;
     sprite->animations_map["walk_right"] = walk_right;

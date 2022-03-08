@@ -18,5 +18,5 @@ public:
 private:
     int xdif, ydif;
     SDL_Rect tmp_src, tmp_dest;
-    std::array<SDL_Texture*, 6> grass;
+    std::array<SDL_Texture*, 6> tile_type;
 };
