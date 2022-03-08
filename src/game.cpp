@@ -26,7 +26,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     is_running = true;
-    player = new PlayerManager(360, 280, "res/player.png");
+    player = new PlayerManager(365, 300, "res/player.png");
     map = new WorldMap(player);
 }
 void Game::HandleEvents()

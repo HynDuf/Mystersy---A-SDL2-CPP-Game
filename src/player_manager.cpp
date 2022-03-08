@@ -32,3 +32,15 @@ void PlayerManager::AddAnimations()
     sprite->animations_map["sword_right"] = sword_right;
     sprite->animations_map["sword_left"] =sword_left;
 }
+
+bool PlayerManager::IsNearPlayer(int x0, int y0, int x1, int y1)
+{
+    return (std::max(x0, 300) <= std::min(x1, 500))
+        && (std::max(y0, 210) <= std::min(y1, 400));
+}
+
+bool PlayerManager::TileCollidePlayer(int x0, int y0, int x1, int y1)
+{
+    return (std::max(x0, 390) <= std::min(x1, 410))
+        && (std::max(y0, 305) <= std::min(y1, 350));
+}

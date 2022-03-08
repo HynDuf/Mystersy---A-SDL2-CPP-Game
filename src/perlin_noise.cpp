@@ -3,7 +3,8 @@
 PerlinNoise::PerlinNoise() 
 {
     srand(time(NULL));
-    seed = rand();
+    // seed = rand();
+    seed = 123;
 }
 PerlinNoise::PerlinNoise(unsigned _seed) 
 {
@@ -15,6 +16,7 @@ double PerlinNoise::DotProduct(const vector2 &V1, const vector2 &V2)
 {
     return V1.first * V2.first + V1.second * V2.second;
 }
+
 // Get this from wiki
 vector2 PerlinNoise::RandomGradient(int ix, int iy) {
     // No precomputed gradients mean this works for any number of grid coordinates
@@ -31,10 +33,6 @@ vector2 PerlinNoise::RandomGradient(int ix, int iy) {
     return v;
 }
 
-double PerlinNoise::Fade(double t)
-{
-    return ((6 * t - 15) * t + 10) * t * t * t;
-}
 
 double PerlinNoise::Interpolate(double w, double a0, double a1)
 {
@@ -80,8 +78,8 @@ double PerlinNoise::GetPerlinNoise2D(double x, double y)
     double ret = 0;
     double magnitude = 2;
     double frequency = 0.08;
-    // With fractal brownian motion - only 1 here - increase for terrain complexity
-    for (int o = 0; o < 1; o++)
+    // With fractal brownian motion - only 2 here - increase for terrain complexity
+    for (int o = 0; o < 2; o++)
     {
         double tmp = magnitude * GetRawPerlinNoise2D(x * frequency, y * frequency);
         ret += tmp;

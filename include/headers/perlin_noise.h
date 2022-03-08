@@ -14,7 +14,6 @@ public:
 private:
     double DotProduct(const vector2 &V1, const vector2 &V2);
     vector2 RandomGradient(int ix, int iy);
-    double Fade(double t);
     double Interpolate(double t, double a1, double a2);
     double GetRawPerlinNoise2D(double x, double y);
     unsigned seed;
