@@ -12,7 +12,6 @@ WorldMap::WorldMap(PlayerManager *_player)
     tile_type[3] = TextureManager::LoadTexture("res/grass_mushroom_0.png");
     tile_type[4] = TextureManager::LoadTexture("res/grass_mushroom_1.png");
     tile_type[5] = TextureManager::LoadTexture("res/tree.png");
-    xdif = ydif = 0;
     tmp_src.x = tmp_src.y = 0;
     tmp_src.h = tmp_src.w = 32;
 }
@@ -54,8 +53,8 @@ void WorldMap::UpdateMap()
         dir = {-1, -1};
         player_tmp->direction = 0;
         player_tmp->sprite->ApplyAnimation("walk_left");
-        xdif -= player_tmp->transform->speed;
-        ydif -= player_tmp->transform->speed;
+        player_tmp->xdif -= player_tmp->transform->speed;
+        player_tmp->ydif -= player_tmp->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_W])
@@ -63,8 +62,8 @@ void WorldMap::UpdateMap()
         dir = {1, -1};
         player_tmp->direction = 1;
         player_tmp->sprite->ApplyAnimation("walk_right");
-        xdif += player_tmp->transform->speed;
-        ydif -= player_tmp->transform->speed;
+        player_tmp->xdif += player_tmp->transform->speed;
+        player_tmp->ydif -= player_tmp->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_S])
@@ -72,8 +71,8 @@ void WorldMap::UpdateMap()
         dir = {-1, 1};
         player_tmp->direction = 0;
         player_tmp->sprite->ApplyAnimation("walk_left");
-        xdif -= player_tmp->transform->speed;
-        ydif += player_tmp->transform->speed;
+        player_tmp->xdif -= player_tmp->transform->speed;
+        player_tmp->ydif += player_tmp->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_S])
@@ -81,20 +80,20 @@ void WorldMap::UpdateMap()
         dir = {1, 1};
         player_tmp->direction = 1;
         player_tmp->sprite->ApplyAnimation("walk_right");
-        xdif += player_tmp->transform->speed;
-        ydif += player_tmp->transform->speed;
+        player_tmp->xdif += player_tmp->transform->speed;
+        player_tmp->ydif += player_tmp->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_W])
     {
         dir = {0, -1};
-        ydif -= player_tmp->transform->speed;
+        player_tmp->ydif -= player_tmp->transform->speed;
         goto Next;
     }
     if (Game::keyboard_state[SDL_SCANCODE_S])
     {
         dir = {0, 1};
-        ydif += player_tmp->transform->speed;
+        player_tmp->ydif += player_tmp->transform->speed;
         goto Next;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A])
@@ -102,7 +101,7 @@ void WorldMap::UpdateMap()
         dir = {-1, 0};
         player_tmp->direction = 0;
         player_tmp->sprite->ApplyAnimation("walk_left");
-        xdif -= player_tmp->transform->speed;
+        player_tmp->xdif -= player_tmp->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D])
@@ -110,7 +109,7 @@ void WorldMap::UpdateMap()
         dir = {1, 0};
         player_tmp->direction = 1;
         player_tmp->sprite->ApplyAnimation("walk_right");
-        xdif += player_tmp->transform->speed;
+        player_tmp->xdif += player_tmp->transform->speed;
         goto Finished;
     }
     Next:;
@@ -134,8 +133,8 @@ void WorldMap::UpdateMap()
     }
     if (valid_move == false)
     {
-        xdif -= dir.first * player_tmp->transform->speed;
-        ydif -= dir.second * player_tmp->transform->speed;
+        player_tmp->xdif -= dir.first * player_tmp->transform->speed;
+        player_tmp->ydif -= dir.second * player_tmp->transform->speed;
         if (player_tmp->direction)
             player_tmp->sprite->ApplyAnimation("idle_right");
         else 
@@ -145,10 +144,10 @@ void WorldMap::UpdateMap()
 
 void WorldMap::RenderMap()
 {
-    int x_left = -((xdif % 32 + 32) % 32);
-    int y_left = -((ydif % 32 + 32) % 32);
-    int X_tile = (xdif / 32) + ((x_left != 0 && xdif < 0) ? -1 : 0);
-    int Y_tile = (ydif / 32) + ((y_left != 0 && ydif < 0) ? -1 : 0);
+    int x_left = -((player_tmp->xdif % 32 + 32) % 32);
+    int y_left = -((player_tmp->ydif % 32 + 32) % 32);
+    int X_tile = (player_tmp->xdif / 32) + ((x_left != 0 && player_tmp->xdif < 0) ? -1 : 0);
+    int Y_tile = (player_tmp->ydif / 32) + ((y_left != 0 && player_tmp->ydif < 0) ? -1 : 0);
 
     tmp_dest.h = tmp_dest.w = 32;
 
@@ -190,8 +189,8 @@ void WorldMap::RenderMap()
 
 bool WorldMap::InsidePlayerStartingZone(int x, int y)
 {
-    return ((x + xdif) <= 450)
-        && ((x + xdif) >= 200)
-        && ((y + ydif) <= 400)
-        && ((y + ydif) >= 150);
+    return ((x + player_tmp->xdif) <= 450)
+        && ((x + player_tmp->xdif) >= 200)
+        && ((y + player_tmp->ydif) <= 400)
+        && ((y + player_tmp->ydif) >= 150);
 }

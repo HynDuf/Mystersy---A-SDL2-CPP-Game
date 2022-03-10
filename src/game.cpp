@@ -3,8 +3,9 @@
 #include <SDL_image.h>
 #include <texture_manager.h>
 #include <player_manager.h>
-
+#include <enemy_manager.h>
 #include <world_map.h>
+EnemyManager *enemy;
 PlayerManager *player;
 SDL_Texture *player_tex;
 SDL_Renderer *Game::renderer = nullptr;
@@ -26,7 +27,8 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     is_running = true;
-    player = new PlayerManager(365, 300, "res/player.png");
+    player = new PlayerManager("res/player.png", 365, 300);
+    enemy = new EnemyManager("res/enemy_skeleton.png", 300, 250);
     map = new WorldMap(player);
 }
 void Game::HandleEvents()
@@ -47,6 +49,7 @@ void Game::HandleEvents()
 void Game::Update()
 {
     player->Update();
+    enemy->Update();
     map->UpdateMap();
 }
 void Game::Render()
@@ -54,6 +57,7 @@ void Game::Render()
     SDL_RenderClear(renderer);
     // Render something here
     map->RenderMap();
+    enemy->Render(-player->xdif, -player->ydif);
     player->Render();
     SDL_RenderPresent(renderer);
 }

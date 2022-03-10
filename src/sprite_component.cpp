@@ -50,6 +50,12 @@ void SpriteComponent::Draw()
 {
     TextureManager::Draw(texture, src_rect, dest_rect);
 }
+void SpriteComponent::Draw(int deltax, int deltay)
+{
+    dest_rect.x += deltax;
+    dest_rect.y += deltay;
+    TextureManager::Draw(texture, src_rect, dest_rect);
+}
 
 void SpriteComponent::ApplyAnimation(const std::string &animation_name)
 {

@@ -26,8 +26,7 @@ private:
     // just make it grass type.
     bool InsidePlayerStartingZone(int x, int y);
 
-    // How far player has moved?
-    int xdif, ydif;
+    
 
     // Manager deep_water, water and tree so player can't walk through
     // {x, y, width/height}

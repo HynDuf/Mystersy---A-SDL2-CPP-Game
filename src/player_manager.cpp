@@ -1,10 +1,13 @@
 #include <player_manager.h>
 #include <texture_manager.h>
-PlayerManager::PlayerManager(int orig_x, int orig_y, const char *texture_file)
+PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
 {
+    xdif = ydif = 0;
     transform = new TransformComponent(orig_x, orig_y, 2, 70, 45);
     sprite = new SpriteComponent(texture_file, transform);
     direction = 1;
+    health = 100;
+    attack = 2;
     AddAnimations();
     sprite->ApplyAnimation("idle_right");
 }
@@ -35,8 +38,10 @@ void PlayerManager::AddAnimations()
 
 bool PlayerManager::IsNearPlayer(int x0, int y0, int x1, int y1)
 {
-    return (std::max(x0, 300) <= std::min(x1, 500))
-        && (std::max(y0, 210) <= std::min(y1, 400));
+    return (std::max(x0, 385) <= std::min(x1, 415))
+        && (std::max(y0, 305) <= std::min(y1, 355));
+
+    // Assume player's speed always <= 5
 }
 
 bool PlayerManager::TileCollidePlayer(int x0, int y0, int x1, int y1)

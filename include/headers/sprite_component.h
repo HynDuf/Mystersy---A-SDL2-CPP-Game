@@ -31,5 +31,6 @@ public:
     void Init();
     void Update();
     void Draw();
+    void Draw(int deltax, int deltay);
     void ApplyAnimation(const std::string &animation);
 };

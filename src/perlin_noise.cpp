@@ -3,8 +3,7 @@
 PerlinNoise::PerlinNoise() 
 {
     srand(time(NULL));
-    // seed = rand();
-    seed = 123;
+    seed = rand();
 }
 PerlinNoise::PerlinNoise(unsigned _seed) 
 {
