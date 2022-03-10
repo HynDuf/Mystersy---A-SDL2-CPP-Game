@@ -1,6 +1,4 @@
-#include <SDL.h>
 #include <game.h>
-#include <SDL.h>
 
 const int FPS = 60;
 const int FRAME_MAX_DELAY = 1000 / FPS;

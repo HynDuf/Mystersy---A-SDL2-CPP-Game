@@ -1,19 +1,15 @@
 #include <game.h>
-#include <iostream>
-#include <SDL_image.h>
-#include <texture_manager.h>
 #include <player_manager.h>
-#include <enemy_manager.h>
 #include <world_map.h>
+#include <enemy_manager.h>
+#include <texture_manager.h>
 EnemyManager *enemy;
-PlayerManager *player;
-SDL_Texture *player_tex;
 SDL_Renderer *Game::renderer = nullptr;
-WorldMap *map;
 Game::Game() {}
 Game::~Game() {}
 const Uint8 *Game::keyboard_state = SDL_GetKeyboardState(NULL);
-
+WorldMap *map;
+PlayerManager *player;
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
     int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
@@ -29,7 +25,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     is_running = true;
     player = new PlayerManager("res/player.png", 365, 300);
     enemy = new EnemyManager("res/enemy_skeleton.png", 300, 250);
-    map = new WorldMap(player);
+    map = new WorldMap();
 }
 void Game::HandleEvents()
 {

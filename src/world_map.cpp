@@ -1,11 +1,8 @@
 #include <world_map.h>
-#include <game.h>
-#include <perlin_noise.h>
-
-PerlinNoise *perlin_noise = new PerlinNoise();
-WorldMap::WorldMap(PlayerManager *_player)
+#include <player_manager.h>
+WorldMap::WorldMap()
 {
-    player_tmp = _player;
+    perlin_noise = new PerlinNoise();
     tile_type[0] = TextureManager::LoadTexture("res/deep_water.png");
     tile_type[1] = TextureManager::LoadTexture("res/water.png");
     tile_type[2] = TextureManager::LoadTexture("res/grass.png");
@@ -42,90 +39,90 @@ void WorldMap::UpdateMap()
     std::pair<int, int> dir = {0, 0};
     if (Game::keyboard_state[SDL_SCANCODE_SPACE])
     {
-        if (player_tmp->direction)
-            player_tmp->sprite->ApplyAnimation("sword_right");
+        if (player->direction)
+            player->sprite->ApplyAnimation("sword_right");
         else 
-            player_tmp->sprite->ApplyAnimation("sword_left");
+            player->sprite->ApplyAnimation("sword_left");
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])
     {
         dir = {-1, -1};
-        player_tmp->direction = 0;
-        player_tmp->sprite->ApplyAnimation("walk_left");
-        player_tmp->xdif -= player_tmp->transform->speed;
-        player_tmp->ydif -= player_tmp->transform->speed;
+        player->direction = 0;
+        player->sprite->ApplyAnimation("walk_left");
+        player->xdif -= player->transform->speed;
+        player->ydif -= player->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_W])
     {
         dir = {1, -1};
-        player_tmp->direction = 1;
-        player_tmp->sprite->ApplyAnimation("walk_right");
-        player_tmp->xdif += player_tmp->transform->speed;
-        player_tmp->ydif -= player_tmp->transform->speed;
+        player->direction = 1;
+        player->sprite->ApplyAnimation("walk_right");
+        player->xdif += player->transform->speed;
+        player->ydif -= player->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_S])
     {
         dir = {-1, 1};
-        player_tmp->direction = 0;
-        player_tmp->sprite->ApplyAnimation("walk_left");
-        player_tmp->xdif -= player_tmp->transform->speed;
-        player_tmp->ydif += player_tmp->transform->speed;
+        player->direction = 0;
+        player->sprite->ApplyAnimation("walk_left");
+        player->xdif -= player->transform->speed;
+        player->ydif += player->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_S])
     {
         dir = {1, 1};
-        player_tmp->direction = 1;
-        player_tmp->sprite->ApplyAnimation("walk_right");
-        player_tmp->xdif += player_tmp->transform->speed;
-        player_tmp->ydif += player_tmp->transform->speed;
+        player->direction = 1;
+        player->sprite->ApplyAnimation("walk_right");
+        player->xdif += player->transform->speed;
+        player->ydif += player->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_W])
     {
         dir = {0, -1};
-        player_tmp->ydif -= player_tmp->transform->speed;
+        player->ydif -= player->transform->speed;
         goto Next;
     }
     if (Game::keyboard_state[SDL_SCANCODE_S])
     {
         dir = {0, 1};
-        player_tmp->ydif += player_tmp->transform->speed;
+        player->ydif += player->transform->speed;
         goto Next;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A])
     {
         dir = {-1, 0};
-        player_tmp->direction = 0;
-        player_tmp->sprite->ApplyAnimation("walk_left");
-        player_tmp->xdif -= player_tmp->transform->speed;
+        player->direction = 0;
+        player->sprite->ApplyAnimation("walk_left");
+        player->xdif -= player->transform->speed;
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D])
     {
         dir = {1, 0};
-        player_tmp->direction = 1;
-        player_tmp->sprite->ApplyAnimation("walk_right");
-        player_tmp->xdif += player_tmp->transform->speed;
+        player->direction = 1;
+        player->sprite->ApplyAnimation("walk_right");
+        player->xdif += player->transform->speed;
         goto Finished;
     }
     Next:;
-    if (player_tmp->direction)
-        player_tmp->sprite->ApplyAnimation("idle_right");
+    if (player->direction)
+        player->sprite->ApplyAnimation("idle_right");
     else 
-        player_tmp->sprite->ApplyAnimation("idle_left");
+        player->sprite->ApplyAnimation("idle_left");
     Finished:;
     bool valid_move = true;
     for (std::array<int, 3> &tile : tiles_near_player)
     {
-        int x0 = tile[0] - dir.first * player_tmp->transform->speed + (tile[2] == 64 ? 8: 2);
-        int y0 = tile[1] - dir.second * player_tmp->transform->speed + (tile[2] == 64 ? 10 : 3);
+        int x0 = tile[0] - dir.first * player->transform->speed + (tile[2] == 64 ? 8: 2);
+        int y0 = tile[1] - dir.second * player->transform->speed + (tile[2] == 64 ? 10 : 3);
         int x1 = x0 + tile[2] - (tile[2] == 64 ? 8 : 4);
         int y1 = y0 + tile[2] - (tile[2] == 64 ? 30 : 20);
-        if (player_tmp->TileCollidePlayer(x0, y0, x1, y1))
+        if (player->TileCollidePlayer(x0, y0, x1, y1))
         {
             valid_move = false;
             break;
@@ -133,21 +130,21 @@ void WorldMap::UpdateMap()
     }
     if (valid_move == false)
     {
-        player_tmp->xdif -= dir.first * player_tmp->transform->speed;
-        player_tmp->ydif -= dir.second * player_tmp->transform->speed;
-        if (player_tmp->direction)
-            player_tmp->sprite->ApplyAnimation("idle_right");
+        player->xdif -= dir.first * player->transform->speed;
+        player->ydif -= dir.second * player->transform->speed;
+        if (player->direction)
+            player->sprite->ApplyAnimation("idle_right");
         else 
-            player_tmp->sprite->ApplyAnimation("idle_left");
+            player->sprite->ApplyAnimation("idle_left");
     }
 }
 
 void WorldMap::RenderMap()
 {
-    int x_left = -((player_tmp->xdif % 32 + 32) % 32);
-    int y_left = -((player_tmp->ydif % 32 + 32) % 32);
-    int X_tile = (player_tmp->xdif / 32) + ((x_left != 0 && player_tmp->xdif < 0) ? -1 : 0);
-    int Y_tile = (player_tmp->ydif / 32) + ((y_left != 0 && player_tmp->ydif < 0) ? -1 : 0);
+    int x_left = -((player->xdif % 32 + 32) % 32);
+    int y_left = -((player->ydif % 32 + 32) % 32);
+    int X_tile = (player->xdif / 32) + ((x_left != 0 && player->xdif < 0) ? -1 : 0);
+    int Y_tile = (player->ydif / 32) + ((y_left != 0 && player->ydif < 0) ? -1 : 0);
 
     tmp_dest.h = tmp_dest.w = 32;
 
@@ -160,7 +157,7 @@ void WorldMap::RenderMap()
     {
         int tile = GetTileType(x_tile, y_tile);
         if (InsidePlayerStartingZone(x, y))
-            tile = 2;
+            tile = 2; // set to grass
         tmp_dest.x = x;
         tmp_dest.y = y;
         if (tile == 5)
@@ -172,7 +169,7 @@ void WorldMap::RenderMap()
         bool tile_forbidden = (tile <= 1 || tile == 5);
         int sz = (tile == 5 ? 64 : 32);
         // May collide with player
-        if (tile_forbidden == true && player_tmp->IsNearPlayer(x, y, x + sz, y + sz)) 
+        if (tile_forbidden == true && player->IsNearPlayer(x, y, x + sz, y + sz)) 
         {
             tiles_near_player.push_back({x, y, sz});
         }
@@ -189,8 +186,8 @@ void WorldMap::RenderMap()
 
 bool WorldMap::InsidePlayerStartingZone(int x, int y)
 {
-    return ((x + player_tmp->xdif) <= 450)
-        && ((x + player_tmp->xdif) >= 200)
-        && ((y + player_tmp->ydif) <= 400)
-        && ((y + player_tmp->ydif) >= 150);
+    return ((x + player->xdif) <= 450)
+        && ((x + player->xdif) >= 200)
+        && ((y + player->ydif) <= 400)
+        && ((y + player->ydif) >= 150);
 }

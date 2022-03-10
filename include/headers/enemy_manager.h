@@ -2,6 +2,7 @@
 #include <sprite_component.h>
 #include <transform_component.h>
 #include <random>
+
 class EnemyManager
 {
 public:
@@ -13,6 +14,10 @@ public:
 
     // When player moves, everything gets shifted
     void Render(int deltax, int deltay);
+
+    bool IsInsideLivingZone();
+    bool IsInsideMovingZone();
+    bool CheckMoveCollide();
 
     int health;
     int attack;
@@ -26,3 +31,5 @@ public:
     bool direction;
 private:
 };  
+
+extern std::vector<EnemyManager> enemy_container;

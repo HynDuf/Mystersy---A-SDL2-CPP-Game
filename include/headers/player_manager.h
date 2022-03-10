@@ -1,5 +1,4 @@
 #pragma once
-#include <game.h>
 #include <transform_component.h>
 #include <sprite_component.h>
 #include <animation.h>
@@ -27,3 +26,4 @@ public:
     // 1 is right, 0 is left
     bool direction;
 };
+extern PlayerManager *player;

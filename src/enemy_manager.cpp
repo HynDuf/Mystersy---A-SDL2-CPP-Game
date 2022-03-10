@@ -1,5 +1,6 @@
 #include <enemy_manager.h>
-
+#include <player_manager.h>
+#include <world_map.h>
 EnemyManager::EnemyManager(const char *texture_file, int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
@@ -30,6 +31,8 @@ void EnemyManager::AddAnimations()
 }
 void EnemyManager::Update()
 {
+    // Already checked IsInsideLivingZone(player->xdif, player->ydif) == false
+    
     if (--move_duration == 0)
     {
         move_duration = 50;
@@ -46,6 +49,7 @@ void EnemyManager::Update()
         } 
     } else if (move_duration == 10) 
         dx = dy = 0;
+    
     if (move_duration & 1)
     {
         transform->x += dx;
@@ -57,4 +61,35 @@ void EnemyManager::Update()
 void EnemyManager::Render(int deltax, int deltay)
 {
     sprite->Draw(deltax, deltay);
+}
+
+bool EnemyManager::IsInsideLivingZone()
+{
+    return 1;
+}
+bool EnemyManager::IsInsideMovingZone()
+{
+
+    return 1;
+}
+
+/*
+@brief Try moving and check if it'll collide with anything.
+       Only check if enemy is inside moving zone, i.e., IsInsideMovingZone(...) is true.
+@return 1 if enemy moves and it collides with deep_water, water, tree; 0 otherwise.
+*/
+bool EnemyManager::CheckMoveCollide()
+{
+    // If don't move, return 1
+    if (move_duration % 2 == 0)
+        return 1;
+    if (dx == 0 && dy == 0) 
+        return 1;
+    
+    // Try moving
+    int curx = transform->x - player->xdif + dx;
+    int cury = transform->y - player->ydif + dy;
+    // Iterate the tiles around and check for collision
+
+    return 1;
 }

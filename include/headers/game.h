@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+
 class Game
 {
 public: 
@@ -18,7 +19,6 @@ public:
     static SDL_Renderer *renderer;
     static SDL_Event event;
     static const Uint8 *keyboard_state;
-    
     
 private:
     bool is_running;
