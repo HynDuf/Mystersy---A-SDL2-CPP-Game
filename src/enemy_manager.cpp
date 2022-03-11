@@ -1,6 +1,7 @@
 #include <enemy_manager.h>
 #include <player_manager.h>
 #include <world_map.h>
+#include <assert.h>
 EnemyManager::EnemyManager(const char *texture_file, int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
@@ -12,7 +13,7 @@ EnemyManager::EnemyManager(const char *texture_file, int x, int y)
     AddAnimations();
     sprite->ApplyAnimation("idle_right");
     direction = 1;
-    srand(time(NULL));
+    
 }
 EnemyManager::~EnemyManager() {}
 
@@ -31,46 +32,55 @@ void EnemyManager::AddAnimations()
 }
 void EnemyManager::Update()
 {
-    // Already checked IsInsideLivingZone(player->xdif, player->ydif) == false
-    
-    if (--move_duration == 0)
+    // Already checked IsInsideMovingZone() == true
+    if (IsInsideMovingZone())
     {
-        move_duration = 50;
-        dx = (rand() % 3) - 1; // [-1, 0, 1]
-        dy = (rand() % 3) - 1; // [-1, 0, 1]
-        if (dx == 1)
+        if (--move_duration == 0)
         {
-            sprite->ApplyAnimation("walk_right");
-            direction = 1;
-        } else if (dx == -1)
+            move_duration = 50;
+            dx = (rand() % 3) - 1; // [-1, 0, 1]
+            dy = (rand() % 3) - 1; // [-1, 0, 1]
+            if (dx == 1)
+            {
+                sprite->ApplyAnimation("walk_right");
+                direction = 1;
+            } else if (dx == -1)
+            {
+                sprite->ApplyAnimation("walk_left");
+                direction = 0;
+            } 
+        } else if (move_duration == 10) 
+            dx = dy = 0;
+        
+        
+        if (move_duration & 1)
         {
-            sprite->ApplyAnimation("walk_left");
-            direction = 0;
-        } 
-    } else if (move_duration == 10) 
-        dx = dy = 0;
-    
-    if (move_duration & 1)
-    {
-        transform->x += dx;
-        transform->y += dy;
-
+            if (CheckMoveCollide())
+            {
+                transform->x += dx;
+                transform->y += dy;
+            }
+        }
     }
+    
     sprite->Update();
 }
-void EnemyManager::Render(int deltax, int deltay)
+void EnemyManager::Render()
 {
-    sprite->Draw(deltax, deltay);
+    sprite->Draw(-player->xdif, -player->ydif);
 }
 
 bool EnemyManager::IsInsideLivingZone()
 {
-    return 1;
+    int x = transform->x - player->xdif;
+    int y = transform->y - player->ydif;
+    return (-1000 < x && x < 2000 && -1000 < y && y < 2000);
 }
 bool EnemyManager::IsInsideMovingZone()
 {
-
-    return 1;
+    int x = transform->x - player->xdif;
+    int y = transform->y - player->ydif;
+    return (-160 < x && x < 928 && -160 < y && y < 768);
 }
 
 /*
@@ -81,15 +91,48 @@ bool EnemyManager::IsInsideMovingZone()
 bool EnemyManager::CheckMoveCollide()
 {
     // If don't move, return 1
-    if (move_duration % 2 == 0)
-        return 1;
     if (dx == 0 && dy == 0) 
         return 1;
     
     // Try moving
     int curx = transform->x - player->xdif + dx;
     int cury = transform->y - player->ydif + dy;
-    // Iterate the tiles around and check for collision
+    
+    // Iterate the surrounding tiles and check for collision
+    bool valid_move = 1;
+    int x_left = -((player->xdif % 32 + 32) % 32);
+    int y_left = -((player->ydif % 32 + 32) % 32);
+    int X_tile = (player->xdif / 32) + ((x_left != 0 && player->xdif < 0) ? -1 : 0);
+    int Y_tile = (player->ydif / 32) + ((y_left != 0 && player->ydif < 0) ? -1 : 0);
 
-    return 1;
+    // @TODO: Optimize only iterate through surrounding tiles
+    for (int x = x_left - 256, x_tile = X_tile - 8; x < 928; x += 32, x_tile++)
+        for (int y = y_left - 256, y_tile = Y_tile - 8; y < 768; y += 32, y_tile++)
+    {
+        int tile = map->GetTileType(x_tile, y_tile);
+        if (map->InsidePlayerStartingZone(x, y))
+            continue; // tile = 2; // set to grass
+        int sz = (tile == 5 ? 64 : 32);
+        int x0 = x + (sz == 64 ? 4: 0);
+        int y0 = y + (sz == 64 ? 4 : 0);
+        int x1 = x + sz - (sz == 64 ? 4 : 0);
+        int y1 = y + sz - (sz == 64 ? 25 : 15);
+        if ((tile <= 1 || tile == 5) && TileCollideEnemy(x0, y0, x1, y1, curx, cury))
+        {
+            // std::cout << "Tile: " << tile << '\n';
+            // std::cout << x << ' ' << y << '\n';
+            // std::cout << curx << ' ' << cury << '\n';
+            valid_move = false;
+            goto Next;
+        }
+        
+    }
+    Next:;
+    return valid_move;
+}
+
+bool EnemyManager::TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y)
+{
+    return (std::max(x0, X + 22) <= std::min(x1, X + 43))
+        && (std::max(y0, Y - 3) <= std::min(y1, Y + 40));
 }

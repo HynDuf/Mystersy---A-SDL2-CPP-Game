@@ -13,23 +13,22 @@ public:
     void Update();
 
     // When player moves, everything gets shifted
-    void Render(int deltax, int deltay);
+    void Render();
 
     bool IsInsideLivingZone();
     bool IsInsideMovingZone();
     bool CheckMoveCollide();
-
-    int health;
-    int attack;
+    bool TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y);
+    
     SpriteComponent *sprite;
     TransformComponent *transform;
 
+
+private:
+    int health;
+    int attack;
     int move_duration;
     int dx, dy;
-
     // 1 is right, 0 is left
     bool direction;
-private:
 };  
-
-extern std::vector<EnemyManager> enemy_container;

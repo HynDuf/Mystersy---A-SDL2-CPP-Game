@@ -23,7 +23,7 @@ int WorldMap::GetTileType(int x, int y)
     double val = perlin_noise->GetPerlinNoise2D(x, y);
     if (val < 0.09) 
         return 0; // deep_water
-    if (val < 0.25) 
+    if (val < 0.3) 
         return 1; // water
     if (val < 0.70) 
         return 2; // grass
@@ -152,8 +152,8 @@ void WorldMap::RenderMap()
     
     tiles_near_player.clear();
 
-    for (int x = x_left - 32, x_tile = X_tile; x < 800; x += 32, x_tile++)
-        for (int y = y_left - 32, y_tile = Y_tile; y < 640; y += 32, y_tile++)
+    for (int x = x_left - 32, x_tile = X_tile - 1; x < 800; x += 32, x_tile++)
+        for (int y = y_left - 32, y_tile = Y_tile - 1; y < 640; y += 32, y_tile++)
     {
         int tile = GetTileType(x_tile, y_tile);
         if (InsidePlayerStartingZone(x, y))
