@@ -12,7 +12,7 @@ public:
     void Update();
     void Render();
     bool IsNearPlayer(int x0, int y0, int x1, int y1);
-    bool TileCollidePlayer(int x0, int y0, int x1, int y1);
+    bool CollidePlayer(int x0, int y0, int x1, int y1);
 
     // How far player has moved?
     int xdif, ydif;

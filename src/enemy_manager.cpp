@@ -127,6 +127,8 @@ bool EnemyManager::CheckMoveCollide()
         }
         
     }
+    if (player->CollidePlayer(curx + 20, cury + 6, curx + 50, cury + 26))
+        valid_move = false;
     Next:;
     return valid_move;
 }

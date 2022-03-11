@@ -44,7 +44,7 @@ bool PlayerManager::IsNearPlayer(int x0, int y0, int x1, int y1)
     // Assume player's speed always <= 5
 }
 
-bool PlayerManager::TileCollidePlayer(int x0, int y0, int x1, int y1)
+bool PlayerManager::CollidePlayer(int x0, int y0, int x1, int y1)
 {
     return (std::max(x0, 390) <= std::min(x1, 410))
         && (std::max(y0, 305) <= std::min(y1, 350));

@@ -1,5 +1,6 @@
 #include <world_map.h>
 #include <player_manager.h>
+#include <enemy_generator.h>
 WorldMap::WorldMap()
 {
     perlin_noise = new PerlinNoise();
@@ -122,12 +123,25 @@ void WorldMap::UpdateMap()
         int y0 = tile[1] - dir.second * player->transform->speed + (tile[2] == 64 ? 10 : 3);
         int x1 = x0 + tile[2] - (tile[2] == 64 ? 8 : 4);
         int y1 = y0 + tile[2] - (tile[2] == 64 ? 30 : 20);
-        if (player->TileCollidePlayer(x0, y0, x1, y1))
+        if (player->CollidePlayer(x0, y0, x1, y1))
         {
             valid_move = false;
             break;
         }
     }
+    if (valid_move == true)
+        for (EnemyManager *&e : enemy_generator->enemy_container)
+        {
+            int x0 = e->transform->x - player->xdif - dir.first * player->transform->speed + 20;
+            int y0 = e->transform->y - player->ydif - dir.second * player->transform->speed + 6;
+            int x1 = x0 + 30;
+            int y1 = y0 + 20;
+            if (player->CollidePlayer(x0, y0, x1, y1))
+            {
+                valid_move = false;
+                break;
+            }
+        }
     if (valid_move == false)
     {
         player->xdif -= dir.first * player->transform->speed;
