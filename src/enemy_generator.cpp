@@ -32,7 +32,7 @@ void EnemyGenerator::Update()
             // Iterate through the outer "Moving Zone" to generate new enemy
             for (int x = x_left - 160, x_tile = X_tile - 5; x < 928; x += 32, x_tile++)
                 for (int y = y_left - 160, y_tile = Y_tile - 5; y < 768; y += 32, y_tile++)
-                    if ((x < x_left - 32 || x >= 832 || y < y_left - 32 || y >= 672))
+                    if (!(x < x_left - 32 || x >= 832 || y < y_left - 32 || y >= 672))
                     {
                         int tile0 = map->GetTileType(x_tile, y_tile);
                         int tile1 = map->GetTileType(x_tile - 1, y_tile);

@@ -12,7 +12,7 @@ public:
     std::vector<EnemyManager*> enemy_container;
 
 private:
-    const int MAX_ENEMY = 20;
+    const int MAX_ENEMY = 50;
     int generator_interval;
     const char *texture;
 

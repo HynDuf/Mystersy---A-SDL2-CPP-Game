@@ -105,9 +105,12 @@ bool EnemyManager::CheckMoveCollide()
     int X_tile = (player->xdif / 32) + ((x_left != 0 && player->xdif < 0) ? -1 : 0);
     int Y_tile = (player->ydif / 32) + ((y_left != 0 && player->ydif < 0) ? -1 : 0);
 
-    // @TODO: Optimize only iterate through surrounding tiles
-    for (int x = x_left - 256, x_tile = X_tile - 8; x < 928; x += 32, x_tile++)
-        for (int y = y_left - 256, y_tile = Y_tile - 8; y < 768; y += 32, y_tile++)
+    while (x_left + 32 <= curx - 96) x_left += 32, X_tile++;
+    while (x_left > curx - 96) x_left -= 32, X_tile--;
+    while (y_left + 32 <= cury - 96) y_left += 32, Y_tile++;
+    while (y_left > cury - 96) y_left -= 32, Y_tile--;
+    for (int x = x_left, x_tile = X_tile; x_tile < X_tile + 8; x += 32, x_tile++)
+        for (int y = y_left, y_tile = Y_tile; y_tile < Y_tile + 8; y += 32, y_tile++)
     {
         int tile = map->GetTileType(x_tile, y_tile);
         if (map->InsidePlayerStartingZone(x, y))
@@ -119,9 +122,6 @@ bool EnemyManager::CheckMoveCollide()
         int y1 = y + sz - (sz == 64 ? 25 : 15);
         if ((tile <= 1 || tile == 5) && TileCollideEnemy(x0, y0, x1, y1, curx, cury))
         {
-            // std::cout << "Tile: " << tile << '\n';
-            // std::cout << x << ' ' << y << '\n';
-            // std::cout << curx << ' ' << cury << '\n';
             valid_move = false;
             goto Next;
         }
