@@ -2,6 +2,7 @@
 #include <sprite_component.h>
 #include <transform_component.h>
 #include <random>
+#include <enemy_health_bar.h>
 
 class EnemyManager
 {
@@ -25,6 +26,7 @@ public:
     
     SpriteComponent *sprite;
     TransformComponent *transform;
+    EnemyHealthBar *health_bar;
 
     int health;
     int attack;

@@ -1,12 +1,13 @@
 #include <enemy_manager.h>
 #include <player_manager.h>
 #include <world_map.h>
-#include <assert.h>
+
 EnemyManager::EnemyManager(const char *texture_file, int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
     sprite = new SpriteComponent(texture_file, transform);
-    health = 50;
+    health_bar = new EnemyHealthBar("res/enemy_health_bar.png", transform, 56);
+    health = 56;
     attack = 1;
     attack_interval = 3;
     move_duration = 50;
@@ -103,10 +104,12 @@ void EnemyManager::Update()
     }
     
     sprite->Update();
+    health_bar->Update();
 }
 void EnemyManager::Render()
 {
     sprite->Draw(-player->xdif, -player->ydif);
+    health_bar->Draw(-player->xdif, -player->ydif);
 }
 
 bool EnemyManager::IsInsideLivingZone()

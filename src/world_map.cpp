@@ -53,9 +53,11 @@ void WorldMap::UpdateMap()
             if (player->direction && player->CollideSwordRight(x0, y0, x1, y1))
             {
                 e->health -= player->attack;
+                e->health_bar->Reset(e->health);
             } else if (!player->direction && player->CollideSwordLeft(x0, y0, x1, y1))
             {
                 e->health -= player->attack;
+                e->health_bar->Reset(e->health);
             }
         }
         return;
