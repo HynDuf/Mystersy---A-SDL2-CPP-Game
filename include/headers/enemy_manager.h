@@ -21,12 +21,14 @@ public:
     bool TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y);
     bool IsAlive();
     bool IsNearPlayer();
+    bool IsNextToPlayer();
     
     SpriteComponent *sprite;
     TransformComponent *transform;
 
     int health;
     int attack;
+    int attack_interval;
 
 private:
     int move_duration;

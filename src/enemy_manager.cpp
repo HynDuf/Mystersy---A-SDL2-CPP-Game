@@ -7,7 +7,8 @@ EnemyManager::EnemyManager(const char *texture_file, int x, int y)
     transform = new TransformComponent(x, y, 1, 70, 40);
     sprite = new SpriteComponent(texture_file, transform);
     health = 50;
-    attack = 2;
+    attack = 1;
+    attack_interval = 3;
     move_duration = 50;
     dx = dy = 0;
     AddAnimations();
@@ -21,64 +22,84 @@ void EnemyManager::AddAnimations()
 {
     Animation walk_right(0, 31, 17, 4, 200);
     Animation walk_left(17, 31, 17, 4, 200);
-    Animation sword_right(34, 31, 17, 4, 200);
-    Animation sword_left(51, 31, 17, 4, 200);
+    Animation sword_right(34, 31, 17, 4, 150);
+    Animation sword_left(51, 31, 17, 4, 150);
     sprite->animations_map["idle_right"] = walk_right;
     sprite->animations_map["idle_left"] = walk_left;
     sprite->animations_map["walk_right"] = walk_right;
     sprite->animations_map["walk_left"] = walk_left;
     sprite->animations_map["sword_right"] = sword_right;
-    sprite->animations_map["sword_left"] =sword_left;
+    sprite->animations_map["sword_left"] = sword_left;
 }
 void EnemyManager::Update()
 {
-    // Already checked IsInsideMovingZone() == true
+    // Already checked IsInsideLivingZone() == true
     if (IsInsideMovingZone())
     {
-        if (--move_duration == 0)
+        if (IsNextToPlayer()) // Let's attack player
         {
-            if (IsNearPlayer())
-            {
-                move_duration = 1;
-                transform->speed = 2;
-                if (transform->x - player->xdif + 15 < 380)
-                    dx = 1;
-                else if (transform->x - player->xdif + 10 > 380)
-                    dx = -1;
-                else dx = 0;
-                if (transform->y - player->ydif + 10 < 300)
-                    dy = 1;
-                else if (transform->y - player->ydif + 5 > 300)  
-                    dy = -1;
-                else dy = 0;
-            } else 
-            {
-                move_duration = 50;
-                transform->speed = 1;
-                dx = (rand() % 3) - 1; // [-1, 0, 1]
-                dy = (rand() % 3) - 1; // [-1, 0, 1]
+            if (transform->x - player->xdif <= 380)
+                sprite->ApplyAnimation("sword_right");
+            else 
+                sprite->ApplyAnimation("sword_left");
+            if (sprite->src_rect.x / 31 == 3)
+            {   
+                if (--attack_interval == 0)
+                {
+                    attack_interval = 3;
+                    player->health -= attack;
+                    std::cout << "Player's Health: " << player->health << '\n';
+                }
+
             }
-            if (dx == 1)
-            {
-                sprite->ApplyAnimation("walk_right");
-                direction = 1;
-            } else if (dx == -1)
-            {
-                sprite->ApplyAnimation("walk_left");
-                direction = 0;
-            } 
-        } else if (move_duration == 10) 
-            dx = dy = 0;
-        
-        
-        if (move_duration & 1)
+        } else 
         {
-            if (CheckMoveCollide())
+            if (--move_duration == 0)
             {
-                transform->x += dx * transform->speed;
-                transform->y += dy * transform->speed;
+                if (IsNearPlayer())
+                {
+                    move_duration = 1;
+                    transform->speed = 2;
+                    if (transform->x - player->xdif + 15 < 380)
+                        dx = 1;
+                    else if (transform->x - player->xdif + 10 > 380)
+                        dx = -1;
+                    else dx = 0;
+                    if (transform->y - player->ydif + 10 < 300)
+                        dy = 1;
+                    else if (transform->y - player->ydif + 5 > 300)  
+                        dy = -1;
+                    else dy = 0;
+                } else 
+                {
+                    move_duration = 50;
+                    transform->speed = 1;
+                    dx = (rand() % 3) - 1; // [-1, 0, 1]
+                    dy = (rand() % 3) - 1; // [-1, 0, 1]
+                }
+                if (dx == 1)
+                {
+                    sprite->ApplyAnimation("walk_right");
+                    direction = 1;
+                } else if (dx == -1)
+                {
+                    sprite->ApplyAnimation("walk_left");
+                    direction = 0;
+                } 
+            } else if (move_duration == 10) 
+                dx = dy = 0;
+            
+            
+            if (move_duration & 1)
+            {
+                if (CheckMoveCollide())
+                {
+                    transform->x += dx * transform->speed;
+                    transform->y += dy * transform->speed;
+                }
             }
         }
+        
     }
     
     sprite->Update();
@@ -167,4 +188,11 @@ bool EnemyManager::IsNearPlayer()
     int X = transform->x - player->xdif - 365;
     int Y = transform->y - player->ydif - 300;
     return  X * X + Y * Y <= 150 * 150;
+}
+
+bool EnemyManager::IsNextToPlayer()
+{
+    int curx = transform->x - player->xdif;
+    int cury = transform->y - player->ydif;
+    return player->CollidePlayer(curx + 17, cury + 6, curx + 53, cury + 26);
 }

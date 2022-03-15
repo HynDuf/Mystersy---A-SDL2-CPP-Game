@@ -10,9 +10,9 @@ private:
 
     SDL_Texture *texture;
     TransformComponent *transform;
-    SDL_Rect src_rect, dest_rect;
 
 public:
+    SDL_Rect src_rect, dest_rect;
     bool animated = false;
     int frames = 1;
     int speed = 100;

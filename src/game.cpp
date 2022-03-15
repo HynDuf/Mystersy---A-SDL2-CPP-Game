@@ -47,16 +47,16 @@ void Game::HandleEvents()
 void Game::Update()
 {
     player->Update();
-    enemy_generator->Update();
     map->UpdateMap();
+    enemy_generator->Update();
 }
 void Game::Render()
 {
     SDL_RenderClear(renderer);
     // Render something here
     map->RenderMap();
-    enemy_generator->Render();
     player->Render();
+    enemy_generator->Render();
     SDL_RenderPresent(renderer);
 }
 void Game::Clean()
