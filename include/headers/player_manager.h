@@ -2,6 +2,7 @@
 #include <transform_component.h>
 #include <sprite_component.h>
 #include <animation.h>
+#include <player_health_box.h>
 class PlayerManager
 {
 public:
@@ -24,6 +25,7 @@ public:
 
     SpriteComponent *sprite;
     TransformComponent *transform;
+    PlayerHealthBox *health_box;
 
     // 1 is right, 0 is left
     bool direction;

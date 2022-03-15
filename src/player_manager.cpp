@@ -5,6 +5,7 @@ PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
     xdif = ydif = 0;
     transform = new TransformComponent(orig_x, orig_y, 3, 70, 45);
     sprite = new SpriteComponent(texture_file, transform);
+    health_box = new PlayerHealthBox(100);
     direction = 1;
     health = 100;
     attack = 2;
@@ -14,6 +15,8 @@ PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
 PlayerManager::~PlayerManager() {}
 void PlayerManager::Update()
 {
+    health = std::max(health, 0);
+    health_box->Update(player->health);
     sprite->Update();
 }
 

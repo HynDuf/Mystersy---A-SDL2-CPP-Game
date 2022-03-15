@@ -49,7 +49,6 @@ void EnemyManager::Update()
                 {
                     attack_interval = 3;
                     player->health -= attack;
-                    std::cout << "Player's Health: " << player->health << '\n';
                 }
 
             }

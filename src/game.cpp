@@ -21,6 +21,20 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
         is_running = false;
         return;
     }
+    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+    {
+        printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+        is_running = false;
+        return;
+    }
+
+    // Initialize SDL_ttf
+    if (TTF_Init() == -1)
+    {
+        printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+        is_running = false;
+        return;
+    }
     window = SDL_CreateWindow(title, xpos, ypos, width, height, screen_mode);
     renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -57,6 +71,7 @@ void Game::Render()
     map->RenderMap();
     player->Render();
     enemy_generator->Render();
+    player->health_box->Render();
     SDL_RenderPresent(renderer);
 }
 void Game::Clean()
