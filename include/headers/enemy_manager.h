@@ -19,14 +19,16 @@ public:
     bool IsInsideMovingZone();
     bool CheckMoveCollide();
     bool TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y);
+    bool IsAlive();
+    bool IsNearPlayer();
     
     SpriteComponent *sprite;
     TransformComponent *transform;
 
-
-private:
     int health;
     int attack;
+
+private:
     int move_duration;
     int dx, dy;
     // 1 is right, 0 is left

@@ -6,7 +6,7 @@ EnemyManager::EnemyManager(const char *texture_file, int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
     sprite = new SpriteComponent(texture_file, transform);
-    health = 10;
+    health = 50;
     attack = 2;
     move_duration = 50;
     dx = dy = 0;
@@ -37,9 +37,27 @@ void EnemyManager::Update()
     {
         if (--move_duration == 0)
         {
-            move_duration = 50;
-            dx = (rand() % 3) - 1; // [-1, 0, 1]
-            dy = (rand() % 3) - 1; // [-1, 0, 1]
+            if (IsNearPlayer())
+            {
+                move_duration = 1;
+                transform->speed = 2;
+                if (transform->x - player->xdif + 15 < 380)
+                    dx = 1;
+                else if (transform->x - player->xdif + 10 > 380)
+                    dx = -1;
+                else dx = 0;
+                if (transform->y - player->ydif + 10 < 300)
+                    dy = 1;
+                else if (transform->y - player->ydif + 5 > 300)  
+                    dy = -1;
+                else dy = 0;
+            } else 
+            {
+                move_duration = 50;
+                transform->speed = 1;
+                dx = (rand() % 3) - 1; // [-1, 0, 1]
+                dy = (rand() % 3) - 1; // [-1, 0, 1]
+            }
             if (dx == 1)
             {
                 sprite->ApplyAnimation("walk_right");
@@ -57,8 +75,8 @@ void EnemyManager::Update()
         {
             if (CheckMoveCollide())
             {
-                transform->x += dx;
-                transform->y += dy;
+                transform->x += dx * transform->speed;
+                transform->y += dy * transform->speed;
             }
         }
     }
@@ -95,8 +113,8 @@ bool EnemyManager::CheckMoveCollide()
         return 1;
     
     // Try moving
-    int curx = transform->x - player->xdif + dx;
-    int cury = transform->y - player->ydif + dy;
+    int curx = transform->x - player->xdif + dx * transform->speed;
+    int cury = transform->y - player->ydif + dy * transform->speed;
     
     // Iterate the surrounding tiles and check for collision
     bool valid_move = 1;
@@ -136,5 +154,17 @@ bool EnemyManager::CheckMoveCollide()
 bool EnemyManager::TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y)
 {
     return (std::max(x0, X + 22) <= std::min(x1, X + 43))
-        && (std::max(y0, Y - 3) <= std::min(y1, Y + 40));
+        && (std::max(y0, Y - 2) <= std::min(y1, Y + 40));
+}
+
+bool EnemyManager::IsAlive()
+{
+    return health > 0;
+}
+
+bool EnemyManager::IsNearPlayer()
+{
+    int X = transform->x - player->xdif - 365;
+    int Y = transform->y - player->ydif - 300;
+    return  X * X + Y * Y <= 150 * 150;
 }

@@ -44,7 +44,21 @@ void WorldMap::UpdateMap()
             player->sprite->ApplyAnimation("sword_right");
         else 
             player->sprite->ApplyAnimation("sword_left");
-        goto Finished;
+        for (EnemyManager *&e : enemy_generator->enemy_container)
+        {
+            int x0 = e->transform->x - player->xdif - dir.first * player->transform->speed + 20;
+            int y0 = e->transform->y - player->ydif - dir.second * player->transform->speed + 6;
+            int x1 = x0 + 30;
+            int y1 = y0 + 20;
+            if (player->direction && player->CollideSwordRight(x0, y0, x1, y1))
+            {
+                e->health -= player->attack;
+            } else if (!player->direction && player->CollideSwordLeft(x0, y0, x1, y1))
+            {
+                e->health -= player->attack;
+            }
+        }
+        return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])
     {

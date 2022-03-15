@@ -3,7 +3,7 @@
 PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
 {
     xdif = ydif = 0;
-    transform = new TransformComponent(orig_x, orig_y, 2, 70, 45);
+    transform = new TransformComponent(orig_x, orig_y, 3, 70, 45);
     sprite = new SpriteComponent(texture_file, transform);
     direction = 1;
     health = 100;
@@ -47,5 +47,16 @@ bool PlayerManager::IsNearPlayer(int x0, int y0, int x1, int y1)
 bool PlayerManager::CollidePlayer(int x0, int y0, int x1, int y1)
 {
     return (std::max(x0, 390) <= std::min(x1, 410))
+        && (std::max(y0, 305) <= std::min(y1, 350));
+}
+
+bool PlayerManager::CollideSwordRight(int x0, int y0, int x1, int y1)
+{
+    return (std::max(x0, 415) <= std::min(x1, 420))
+        && (std::max(y0, 305) <= std::min(y1, 350));
+}
+bool PlayerManager::CollideSwordLeft(int x0, int y0, int x1, int y1)
+{
+    return (std::max(x0, 380) <= std::min(x1, 385))
         && (std::max(y0, 305) <= std::min(y1, 350));
 }

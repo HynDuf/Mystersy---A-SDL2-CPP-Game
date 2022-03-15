@@ -63,7 +63,7 @@ void EnemyGenerator::Update()
     std::vector<EnemyManager*> tmp;
     for (EnemyManager *e : enemy_container)
     {
-        if (e->IsInsideLivingZone())
+        if (e->IsAlive() && e->IsInsideLivingZone())
         {
             e->Update();
             tmp.push_back(e);
