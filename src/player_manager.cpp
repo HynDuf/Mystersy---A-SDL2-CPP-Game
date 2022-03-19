@@ -63,3 +63,8 @@ bool PlayerManager::CollideSwordLeft(int x0, int y0, int x1, int y1)
     return (std::max(x0, 380) <= std::min(x1, 385))
         && (std::max(y0, 305) <= std::min(y1, 350));
 }
+
+bool PlayerManager::IsAlive()
+{
+    return health > 0;
+}

@@ -189,7 +189,7 @@ bool EnemyManager::IsNearPlayer()
 {
     int X = transform->x - player->xdif - 365;
     int Y = transform->y - player->ydif - 300;
-    return  X * X + Y * Y <= 150 * 150;
+    return  X * X + Y * Y <= 250 * 250;
 }
 
 bool EnemyManager::IsNextToPlayer()

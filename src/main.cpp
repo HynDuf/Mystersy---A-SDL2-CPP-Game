@@ -17,6 +17,12 @@ int main(int argc, char *argv[])
         game->HandleEvents();
         game->Update(); 
         game->Render();
+        if (game->Running() == false)
+        {
+            std::cout << "Game Over!\n";
+            SDL_Delay(5000);
+            break;
+        }
         frame_time = SDL_GetTicks() - frame_start;
         if (frame_time < FRAME_MAX_DELAY)
         {

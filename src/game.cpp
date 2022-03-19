@@ -60,9 +60,11 @@ void Game::HandleEvents()
 }
 void Game::Update()
 {
+    enemy_generator->Update();
     player->Update();
     map->UpdateMap();
-    enemy_generator->Update();
+    if (player->IsAlive() == false)
+        is_running = false;
 }
 void Game::Render()
 {
@@ -72,7 +74,19 @@ void Game::Render()
     player->Render();
     enemy_generator->Render();
     player->health_box->Render();
+    if (is_running == false)
+        RenderGameOver();
     SDL_RenderPresent(renderer);
+}
+void Game::RenderGameOver()
+{
+    SDL_Texture *texture = TextureManager::LoadTexture("res/gameover.png");
+    SDL_Rect dest_rect_tmp;
+    dest_rect_tmp.x = 200;
+    dest_rect_tmp.y = 200;
+    dest_rect_tmp.w = 400;
+    dest_rect_tmp.h = 240;
+    TextureManager::Draw(texture, dest_rect_tmp);
 }
 void Game::Clean()
 {

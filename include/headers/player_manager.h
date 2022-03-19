@@ -16,6 +16,7 @@ public:
     bool CollidePlayer(int x0, int y0, int x1, int y1);
     bool CollideSwordRight(int x0, int y0, int x1, int y1);
     bool CollideSwordLeft(int x0, int y0, int x1, int y1);
+    bool IsAlive();
 
     // How far player has moved?
     int xdif, ydif;

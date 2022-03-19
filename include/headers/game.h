@@ -14,6 +14,7 @@ public:
     void HandleEvents();
     void Update();
     void Render();
+    void RenderGameOver();
     void Clean();
     bool Running() {return is_running;}
     static SDL_Renderer *renderer;
