@@ -4,7 +4,7 @@ PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
 {
     xdif = ydif = 0;
     transform = new TransformComponent(orig_x, orig_y, 3, 70, 45);
-    sprite = new SpriteComponent(texture_file, transform);
+    sprite = new SpriteComponent(texture_file, transform, true);
     health_box = new PlayerHealthBox(100);
     direction = 1;
     health = 100;
@@ -36,7 +36,7 @@ void PlayerManager::AddAnimations()
     sprite->animations_map["walk_right"] = walk_right;
     sprite->animations_map["walk_left"] = walk_left;
     sprite->animations_map["sword_right"] = sword_right;
-    sprite->animations_map["sword_left"] =sword_left;
+    sprite->animations_map["sword_left"] = sword_left;
 }
 
 bool PlayerManager::IsNearPlayer(int x0, int y0, int x1, int y1)

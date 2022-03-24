@@ -5,8 +5,8 @@
 EnemyManager::EnemyManager(const char *texture_file, int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
-    sprite = new SpriteComponent(texture_file, transform);
-    health_bar = new EnemyHealthBar("res/enemy_health_bar.png", transform, 56);
+    sprite = new SpriteComponent(texture_file, transform, true);
+    health_bar = new EnemyHealthBar("img/enemy/enemy_health_bar.png", transform, 56);
     health = 56;
     attack = 1;
     attack_interval = 3;
@@ -197,4 +197,10 @@ bool EnemyManager::IsNextToPlayer()
     int curx = transform->x - player->xdif;
     int cury = transform->y - player->ydif;
     return player->CollidePlayer(curx + 17, cury + 6, curx + 53, cury + 26);
+}
+
+void EnemyManager::DecHealth(int v)
+{
+    health -= v;
+    health_bar->Reset(health);
 }

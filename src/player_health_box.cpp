@@ -8,12 +8,12 @@ PlayerHealthBox::PlayerHealthBox(int _full_health)
         printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
     }
     transform = new TransformComponent(20, 15, 0, 40, 35);
-    sprite = new SpriteComponent("res/player_heart.png", transform, 54, 20);
+    sprite = new SpriteComponent("img/player/player_heart.png", transform, false);
     full_health = _full_health;
     box_rect.x = 70;
-    box_rect.y = 22;
-    box_rect.w = 130;
-    box_rect.h = 25;
+    box_rect.y = 20;
+    box_rect.w = 150;
+    box_rect.h = 30;
 }
 
 PlayerHealthBox::~PlayerHealthBox() 

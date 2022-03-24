@@ -1,15 +1,18 @@
 #include <world_map.h>
 #include <player_manager.h>
 #include <enemy_generator.h>
+#include <player_skill_q.h>
+#include <arrow_direction.h>
+
 WorldMap::WorldMap()
 {
     perlin_noise = new PerlinNoise();
-    tile_type[0] = TextureManager::LoadTexture("res/deep_water.png");
-    tile_type[1] = TextureManager::LoadTexture("res/water.png");
-    tile_type[2] = TextureManager::LoadTexture("res/grass.png");
-    tile_type[3] = TextureManager::LoadTexture("res/grass_mushroom_0.png");
-    tile_type[4] = TextureManager::LoadTexture("res/grass_mushroom_1.png");
-    tile_type[5] = TextureManager::LoadTexture("res/tree.png");
+    tile_type[0] = TextureManager::LoadTexture("img/map_tiles/deep_water.png");
+    tile_type[1] = TextureManager::LoadTexture("img/map_tiles/water.png");
+    tile_type[2] = TextureManager::LoadTexture("img/map_tiles/grass.png");
+    tile_type[3] = TextureManager::LoadTexture("img/map_tiles/grass_mushroom_0.png");
+    tile_type[4] = TextureManager::LoadTexture("img/map_tiles/grass_mushroom_1.png");
+    tile_type[5] = TextureManager::LoadTexture("img/map_tiles/tree.png");
     tmp_src.x = tmp_src.y = 0;
     tmp_src.h = tmp_src.w = 32;
 }
@@ -52,12 +55,11 @@ void WorldMap::UpdateMap()
             int y1 = y0 + 20;
             if (player->direction && player->CollideSwordRight(x0, y0, x1, y1))
             {
-                e->health -= player->attack;
-                e->health_bar->Reset(e->health);
+                e->DecHealth(player->attack);
+                
             } else if (!player->direction && player->CollideSwordLeft(x0, y0, x1, y1))
             {
-                e->health -= player->attack;
-                e->health_bar->Reset(e->health);
+                e->DecHealth(player->attack);
             }
         }
         return;
@@ -167,6 +169,11 @@ void WorldMap::UpdateMap()
         else 
             player->sprite->ApplyAnimation("idle_left");
     }
+    if (dir.first != 0 || dir.second != 0)
+        arrow_direction->ResetDirection(dir.first, dir.second);
+    arrow_direction->Update();
+    if (Game::keyboard_state[SDL_SCANCODE_Q])
+        player_skill_q->ExecuteSkill(arrow_direction->dx, arrow_direction->dy);
 }
 
 void WorldMap::RenderMap()

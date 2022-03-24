@@ -23,7 +23,8 @@ public:
     bool IsAlive();
     bool IsNearPlayer();
     bool IsNextToPlayer();
-    
+    void DecHealth(int v);
+
     SpriteComponent *sprite;
     TransformComponent *transform;
     EnemyHealthBar *health_bar;

@@ -1,21 +1,13 @@
 #include <sprite_component.h>
 SpriteComponent::SpriteComponent() {}
-SpriteComponent::SpriteComponent(const char *texture_file, TransformComponent *_transform)
+SpriteComponent::SpriteComponent(const char *texture_file, TransformComponent *_transform, bool _animated)
 {
     SetTexture(texture_file);
     transform = _transform;
-    animated = true;
+    animated = _animated;
     Init();
 }
-SpriteComponent::SpriteComponent(const char *texture_file, TransformComponent *_transform, int _w, int _h)
-{
-    SetTexture(texture_file);
-    transform = _transform;
-    animated = false;
-    anim_width = _w;
-    anim_height = _h;
-    Init();
-}
+
 SpriteComponent::~SpriteComponent() 
 {
     SDL_DestroyTexture(texture);
@@ -27,10 +19,9 @@ void SpriteComponent::SetTexture(const char *texture_file)
 void SpriteComponent::Init()
 {
     src_rect.x = src_rect.y = 0;
-    
+    src_rect.w = src_rect.h = -1;
     dest_rect.h = transform->h;
     dest_rect.w = transform->w;
-
 }
 
 void SpriteComponent::Update()
@@ -38,23 +29,31 @@ void SpriteComponent::Update()
     if (animated)
     {
         src_rect.x = anim_width * static_cast<int> ((SDL_GetTicks() / speed) % frames);
+        src_rect.y = anim_index;
+        src_rect.w = anim_width;
+        src_rect.h = anim_height;
     }
-    src_rect.y = anim_index;
-    src_rect.w = anim_width;
-    src_rect.h = anim_height;
     // NOTE: Update position of transform first
     dest_rect.x = transform->x;
     dest_rect.y = transform->y;
+    dest_rect.h = transform->h;
+    dest_rect.w = transform->w;
 }
 void SpriteComponent::Draw()
 {
-    TextureManager::Draw(texture, src_rect, dest_rect);
+    if (src_rect.w > 0)
+        TextureManager::Draw(texture, src_rect, dest_rect);
+    else
+        TextureManager::Draw(texture, dest_rect);
 }
 void SpriteComponent::Draw(int deltax, int deltay)
 {
     dest_rect.x += deltax;
     dest_rect.y += deltay;
-    TextureManager::Draw(texture, src_rect, dest_rect);
+    if (src_rect.w > 0)
+        TextureManager::Draw(texture, src_rect, dest_rect);
+    else
+        TextureManager::Draw(texture, dest_rect);
 }
 
 void SpriteComponent::ApplyAnimation(const std::string &animation_name)

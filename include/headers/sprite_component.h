@@ -23,8 +23,7 @@ public:
     std::map<std::string, Animation> animations_map;
 
     SpriteComponent();
-    SpriteComponent(const char *texture_file, TransformComponent *_transform);
-    SpriteComponent(const char *texture_file, TransformComponent *_transform, int _w, int _h);
+    SpriteComponent(const char *texture_file, TransformComponent *_transform, bool _animated);
     ~SpriteComponent();
     void SetTexture(const char *texture_file);
     void Init();
