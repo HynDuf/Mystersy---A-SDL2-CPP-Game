@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
         if (game->Running() == false)
         {
             std::cout << "Game Over!\n";
-            SDL_Delay(5000);
             break;
         }
         frame_time = SDL_GetTicks() - frame_start;

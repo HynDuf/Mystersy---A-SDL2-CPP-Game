@@ -11,7 +11,8 @@ public:
     void Update();
     void Render();
     void ExecuteSkill(int dx, int dy);
-    bool CollideEnemy();
+    void UpdateHitEnemy();
+    bool IsCollide(int x0, int y0, int x1, int y1);
 private:
 
     SDL_Texture *circle_on, *circle_off;

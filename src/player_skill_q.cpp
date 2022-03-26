@@ -1,5 +1,7 @@
 #include <player_skill_q.h>
 #include <player_manager.h>
+#include <enemy_generator.h>
+#include <point_2d.h>
 PlayerSkillQ::PlayerSkillQ()
 {
     skill_used = false;
@@ -24,6 +26,7 @@ void PlayerSkillQ::Update()
     {
         transform->Update();
         sprite->Update();
+        UpdateHitEnemy();
     }
 }
 void PlayerSkillQ::Render()
@@ -43,6 +46,14 @@ void PlayerSkillQ::Render()
 }
 void PlayerSkillQ::ExecuteSkill(int dx, int dy)
 {
+    
+    if (cooldown == 0 || cooldown >= 40)
+    {
+        if (player->direction)
+            player->sprite->ApplyAnimation("sword_right");
+        else 
+            player->sprite->ApplyAnimation("sword_left");
+    }
     if (cooldown > 0)
         return;
     skill_used = true;
@@ -109,8 +120,8 @@ void PlayerSkillQ::ExecuteSkill(int dx, int dy)
         transform->w = 60;
         transform->h = 60;
 
-        transform->x = 365 + player->xdif - 30;
-        transform->y = 300 + player->ydif - 30;
+        transform->x = 365 + player->xdif - 28;
+        transform->y = 300 + player->ydif - 28;
     } else if (dx == -1 && dy == 1) // SW
     {
         sprite->src_rect.x = 87;
@@ -149,7 +160,77 @@ void PlayerSkillQ::ExecuteSkill(int dx, int dy)
         transform->y = 300 + player->ydif + 30;
     }
 }
-bool PlayerSkillQ::CollideEnemy()
+
+// Does skill collide with rectangle (x0, y0) -> (x1, y1)?
+bool PlayerSkillQ::IsCollide(int x0, int y0, int x1, int y1)
 {
-    return 1;
+    Point<int> rect_s(x0, y0), rect_e(x1, y1);
+    Point<int> s, e, s1, e1;
+    int dx = transform->vx, dy = transform->vy;
+    int curx = transform->x, cury = transform->y;
+    if (dx == 1 && dy == 0) // E
+    {
+        s = Point<int> (curx, cury);
+        e = Point<int> (curx, cury + 70);
+        s1 = Point<int> (curx + 18, cury);
+        e1 = Point<int> (curx + 18, cury + 70);
+    } else if (dx == 0 && dy == 1) // S
+    {
+        s = Point<int> (curx, cury);
+        e = Point<int> (curx + 70, cury);
+        s1 = Point<int> (curx, cury + 18);
+        e1 = Point<int> (curx + 70, cury + 18);
+    } else if (dx == -1 && dy == 0) // W
+    {   
+        s = Point<int> (curx + 2, cury);
+        e = Point<int> (curx + 2, cury + 70);
+        s1 = Point<int> (curx + 20, cury);
+        e1 = Point<int> (curx + 20, cury + 70);
+    } else if (dx == 0 && dy == -1) // N
+    {
+        s = Point<int> (curx, cury + 2);
+        e = Point<int> (curx + 70, cury + 2);
+        s1 = Point<int> (curx, cury + 20);
+        e1 = Point<int> (curx + 70, cury + 20);
+    } else if (dx == -1 && dy == -1) // NW
+    {
+        s = Point<int> (curx, cury + 45);
+        e = Point<int> (curx + 45, cury);
+        s1 = Point<int> (curx + 15, cury + 60);
+        e1 = Point<int> (curx + 60, cury + 15);
+    } else if (dx == -1 && dy == 1) // SW
+    {
+        s = Point<int> (curx + 15, cury);
+        e = Point<int> (curx + 60, cury + 45);
+        s1 = Point<int> (curx, cury + 15);
+        e1 = Point<int> (curx + 45, cury + 60);
+    } else if (dx == 1 && dy == -1) // NE
+    {
+        s = Point<int> (curx + 15, cury);
+        e = Point<int> (curx + 60, cury + 45);
+        s1 = Point<int> (curx, cury + 15);
+        e1 = Point<int> (curx + 45, cury + 60);
+    } else if (dx == 1 && dy == 1) // SE
+    {
+        s = Point<int> (curx, cury + 45);
+        e = Point<int> (curx + 45, cury);
+        s1 = Point<int> (curx + 15, cury + 60);
+        e1 = Point<int> (curx + 60, cury + 15);
+    }
+    return SegInterRectangle(rect_s, rect_e, s, e) || SegInterRectangle(rect_s, rect_e, s1, e1);
+}
+void PlayerSkillQ::UpdateHitEnemy()
+{
+    for (EnemyManager *&e : enemy_generator->enemy_container)
+        if (e->IsInsideMovingZone())
+        {
+            int x0 = e->transform->x + 20;
+            int y0 = e->transform->y;
+            int x1 = x0 + 40;
+            int y1 = y0 + 30;
+            if (IsCollide(x0, y0, x1, y1))
+            {
+                e->DecHealth(player->attack);
+            } 
+        }
 }
