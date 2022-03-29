@@ -17,7 +17,7 @@ public:
     ~EnemyHealthBar();
     void SetTexture(const char *texture_file);
     void Reset(int health);
-    void Update();
+    void Update(int deltax, int deltay);
     void Draw();
     void Draw(int deltax, int deltay);
 };

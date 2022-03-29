@@ -221,13 +221,25 @@ bool PlayerSkillQ::IsCollide(int x0, int y0, int x1, int y1)
 }
 void PlayerSkillQ::UpdateHitEnemy()
 {
-    for (EnemyManager *&e : enemy_generator->enemy_container)
+    for (EnemySkeleton *&e : enemy_generator->skeleton_container)
         if (e->IsInsideMovingZone())
         {
             int x0 = e->transform->x + 20;
             int y0 = e->transform->y;
             int x1 = x0 + 40;
             int y1 = y0 + 30;
+            if (IsCollide(x0, y0, x1, y1))
+            {
+                e->DecHealth(player->attack);
+            } 
+        }
+    for (EnemyBat *&e : enemy_generator->bat_container)
+        if (e->IsInsideMovingZone())
+        {
+            int x0 = e->transform->x + 14;
+            int y0 = e->transform->y + 5;
+            int x1 = x0 + 25;
+            int y1 = y0 + 20;
             if (IsCollide(x0, y0, x1, y1))
             {
                 e->DecHealth(player->attack);

@@ -1,15 +1,18 @@
 #pragma once
-#include <enemy_manager.h>
+#include <enemy_skeleton.h>
+#include <enemy_bat.h>
 #include <vector>
 class EnemyGenerator 
 {
 public:
-    EnemyGenerator(const char *texture_file);
+    EnemyGenerator();
     ~EnemyGenerator();
-    void AddNewEnemy(int x, int y);
+    void AddNewSkeleton(int x, int y);
+    void AddNewBat(int x, int y);
     void Update();
     void Render();
-    std::vector<EnemyManager*> enemy_container;
+    std::vector<EnemySkeleton*> skeleton_container;
+    std::vector<EnemyBat*> bat_container;
 
 private:
     const int MAX_ENEMY = 50;

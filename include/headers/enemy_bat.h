@@ -4,11 +4,11 @@
 #include <random>
 #include <enemy_health_bar.h>
 
-class EnemyManager
+class EnemyBat
 {
 public:
-    EnemyManager(const char *texture_file, int x, int y);
-    ~EnemyManager();
+    EnemyBat(int x, int y);
+    ~EnemyBat();
 
     void AddAnimations();
     void Update();
@@ -18,12 +18,10 @@ public:
 
     bool IsInsideLivingZone();
     bool IsInsideMovingZone();
-    bool CheckMoveCollide();
-    bool TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y);
     bool IsAlive();
     bool IsNearPlayer();
-    bool IsNextToPlayer();
     void DecHealth(int v);
+    void AttackPlayer();
 
     SpriteComponent *sprite;
     TransformComponent *transform;
@@ -32,6 +30,7 @@ public:
     int health;
     int attack;
     int attack_interval;
+    int attack_radius;
 
 private:
     int move_duration;

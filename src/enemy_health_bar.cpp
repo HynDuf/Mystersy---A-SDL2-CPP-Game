@@ -11,7 +11,7 @@ EnemyHealthBar::EnemyHealthBar(const char *texture_file, TransformComponent *_tr
     dest_rect.h = 7;
     num_partitions = 8;
     appear_duration = 0;
-    // IMPORTANT: _full_health has to be divided by num_partitions
+    // ! _full_health has to be divided by num_partitions
     health_each = _full_health / num_partitions;
 }
 EnemyHealthBar::~EnemyHealthBar()
@@ -29,10 +29,10 @@ void EnemyHealthBar::Reset(int health)
     src_rect.y = (8 - ((health + health_each - 1) / health_each)) * src_rect.h;
 }
 
-void EnemyHealthBar::Update()
+void EnemyHealthBar::Update(int deltax, int deltay)
 {
-    dest_rect.x = transform->x + 23;
-    dest_rect.y = transform->y - 7;
+    dest_rect.x = transform->x + deltax;
+    dest_rect.y = transform->y + deltay;
 }
 void EnemyHealthBar::Draw()
 {

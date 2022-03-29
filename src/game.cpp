@@ -1,13 +1,13 @@
 #include <game.h>
 #include <player_manager.h>
 #include <world_map.h>
-#include <enemy_manager.h>
+#include <enemy_skeleton.h>
 #include <texture_manager.h>
 #include <enemy_generator.h>
 #include <player_skill_q.h>
 #include <arrow_direction.h>
 
-EnemyManager *enemy;
+EnemySkeleton *enemy;
 SDL_Renderer *Game::renderer = nullptr;
 Game::Game() {}
 Game::~Game() {}
@@ -47,7 +47,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     player = new PlayerManager("img/player/player.png", 365, 300);
     player_skill_q = new PlayerSkillQ();
     arrow_direction = new ArrowDirection();
-    enemy_generator = new EnemyGenerator("img/enemy/enemy_skeleton.png");
+    enemy_generator = new EnemyGenerator();
     map = new WorldMap();
 }
 void Game::HandleEvents()
@@ -104,5 +104,7 @@ void Game::Clean()
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
+    IMG_Quit();
+    TTF_Quit();
     std::cout << "Game cleaned" << std::endl;
 }

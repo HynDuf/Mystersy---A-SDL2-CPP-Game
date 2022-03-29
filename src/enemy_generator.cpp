@@ -2,23 +2,27 @@
 #include <world_map.h>
 #include <player_manager.h>
 #include <algorithm>
-EnemyGenerator::EnemyGenerator(const char *texture_file)
+EnemyGenerator::EnemyGenerator()
 {
     generator_interval = 200;
-    texture = texture_file;
 }
 EnemyGenerator::~EnemyGenerator() {}
 
-void EnemyGenerator::AddNewEnemy(int x, int y)
+void EnemyGenerator::AddNewSkeleton(int x, int y)
 {
-    // Ensure that tile at (x, y) is not deep_water, water or tree
-    EnemyManager *enemy = new EnemyManager(texture, x, y);
-    enemy_container.push_back(enemy);
+    // * Ensure that tile at (x, y) is not deep_water, water or tree
+    EnemySkeleton *enemy = new EnemySkeleton(x, y);
+    skeleton_container.push_back(enemy);
+}
+void EnemyGenerator::AddNewBat(int x, int y)
+{
+    EnemyBat *enemy = new EnemyBat(x, y);
+    bat_container.push_back(enemy);
 }
 void EnemyGenerator::Update()
 {   
     
-    if (enemy_container.size() < MAX_ENEMY)
+    if (skeleton_container.size() < MAX_ENEMY)
     {
         if (--generator_interval == 0) // Generate 1 new enemy
         {
@@ -54,14 +58,16 @@ void EnemyGenerator::Update()
             if (!grass.empty())
             {
                 int index = rand() % ((int) grass.size());
-                AddNewEnemy(grass[index].first + player->xdif, grass[index].second + player->ydif);
+                AddNewSkeleton(grass[index].first + player->xdif, grass[index].second + player->ydif);
+                index = rand() % ((int) grass.size());
+                AddNewBat(grass[index].first + player->xdif, grass[index].second + player->ydif);
             } 
             
         }
     }
 
-    std::vector<EnemyManager*> tmp;
-    for (EnemyManager *e : enemy_container)
+    std::vector<EnemySkeleton*> tmp;
+    for (EnemySkeleton *e : skeleton_container)
     {
         if (e->IsAlive() && e->IsInsideLivingZone())
         {
@@ -69,10 +75,22 @@ void EnemyGenerator::Update()
             tmp.push_back(e);
         }
     }
-    enemy_container = std::move(tmp);
+    skeleton_container = std::move(tmp);
+    std::vector<EnemyBat*> tmp1;
+    for (EnemyBat *e : bat_container)
+    {
+        if (e->IsAlive() && e->IsInsideLivingZone())
+        {
+            e->Update();
+            tmp1.push_back(e);
+        }
+    }
+    bat_container = std::move(tmp1);
 }
 void EnemyGenerator::Render()
 {
-    for (EnemyManager *&e : enemy_container)
+    for (EnemySkeleton *&e : skeleton_container)
+        e->Render();
+    for (EnemyBat *&e : bat_container)
         e->Render();
 }

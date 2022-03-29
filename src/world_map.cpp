@@ -47,7 +47,7 @@ void WorldMap::UpdateMap()
             player->sprite->ApplyAnimation("sword_right");
         else 
             player->sprite->ApplyAnimation("sword_left");
-        for (EnemyManager *&e : enemy_generator->enemy_container)
+        for (EnemySkeleton *&e : enemy_generator->skeleton_container)
         {
             int x0 = e->transform->x - player->xdif - dir.first * player->transform->speed + 20;
             int y0 = e->transform->y - player->ydif - dir.second * player->transform->speed + 6;
@@ -62,6 +62,8 @@ void WorldMap::UpdateMap()
                 e->DecHealth(player->attack);
             }
         }
+
+    
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])
@@ -148,7 +150,7 @@ void WorldMap::UpdateMap()
         }
     }
     if (valid_move == true)
-        for (EnemyManager *&e : enemy_generator->enemy_container)
+        for (EnemySkeleton *&e : enemy_generator->skeleton_container)
         {
             int x0 = e->transform->x - player->xdif - dir.first * player->transform->speed + 20;
             int y0 = e->transform->y - player->ydif - dir.second * player->transform->speed + 6;

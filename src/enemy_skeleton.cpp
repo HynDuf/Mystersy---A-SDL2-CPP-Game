@@ -1,15 +1,16 @@
-#include <enemy_manager.h>
+#include <enemy_skeleton.h>
 #include <player_manager.h>
 #include <world_map.h>
 
-EnemyManager::EnemyManager(const char *texture_file, int x, int y)
+EnemySkeleton::EnemySkeleton(int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
-    sprite = new SpriteComponent(texture_file, transform, true);
+    sprite = new SpriteComponent("img/enemy/enemy_skeleton.png", transform, true);
     health_bar = new EnemyHealthBar("img/enemy/enemy_health_bar.png", transform, 56);
     health = 56;
     attack = 1;
     attack_interval = 3;
+    attack_radius = 200;
     move_duration = 50;
     dx = dy = 0;
     AddAnimations();
@@ -17,9 +18,9 @@ EnemyManager::EnemyManager(const char *texture_file, int x, int y)
     direction = 1;
     
 }
-EnemyManager::~EnemyManager() {}
+EnemySkeleton::~EnemySkeleton() {}
 
-void EnemyManager::AddAnimations()
+void EnemySkeleton::AddAnimations()
 {
     Animation walk_right(0, 31, 17, 4, 200);
     Animation walk_left(17, 31, 17, 4, 200);
@@ -32,7 +33,7 @@ void EnemyManager::AddAnimations()
     sprite->animations_map["sword_right"] = sword_right;
     sprite->animations_map["sword_left"] = sword_left;
 }
-void EnemyManager::Update()
+void EnemySkeleton::Update()
 {
     // Already checked IsInsideLivingZone() == true
     if (IsInsideMovingZone())
@@ -43,7 +44,7 @@ void EnemyManager::Update()
                 sprite->ApplyAnimation("sword_right");
             else 
                 sprite->ApplyAnimation("sword_left");
-            if (sprite->src_rect.x / 31 == 3)
+            if (sprite->src_rect.x == 3 * 31)
             {   
                 if (--attack_interval == 0)
                 {
@@ -103,33 +104,33 @@ void EnemyManager::Update()
     }
     
     sprite->Update();
-    health_bar->Update();
+    health_bar->Update(23, -7);
 }
-void EnemyManager::Render()
+void EnemySkeleton::Render()
 {
     sprite->Draw(-player->xdif, -player->ydif);
     health_bar->Draw(-player->xdif, -player->ydif);
 }
 
-bool EnemyManager::IsInsideLivingZone()
+bool EnemySkeleton::IsInsideLivingZone()
 {
     int x = transform->x - player->xdif;
     int y = transform->y - player->ydif;
     return (-1000 < x && x < 2000 && -1000 < y && y < 2000);
 }
-bool EnemyManager::IsInsideMovingZone()
+bool EnemySkeleton::IsInsideMovingZone()
 {
     int x = transform->x - player->xdif;
     int y = transform->y - player->ydif;
     return (-160 < x && x < 928 && -160 < y && y < 768);
 }
 
-/*
-@brief Try moving and check if it'll collide with anything.
-       Only check if enemy is inside moving zone, i.e., IsInsideMovingZone(...) is true.
-@return 1 if enemy moves and it collides with deep_water, water, tree; 0 otherwise.
-*/
-bool EnemyManager::CheckMoveCollide()
+/**
+ *  @brief Try moving and check if it'll collide with anything.
+           Only check if enemy is inside moving zone, i.e., IsInsideMovingZone(...) is true.
+ *  @return 1 if enemy moves and it collides with deep_water, water, tree; 0 otherwise.
+ */
+bool EnemySkeleton::CheckMoveCollide()
 {
     // If don't move, return 1
     if (dx == 0 && dy == 0) 
@@ -174,32 +175,32 @@ bool EnemyManager::CheckMoveCollide()
     return valid_move;
 }
 
-bool EnemyManager::TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y)
+bool EnemySkeleton::TileCollideEnemy(int x0, int y0, int x1, int y1, int X, int Y)
 {
     return (std::max(x0, X + 22) <= std::min(x1, X + 43))
         && (std::max(y0, Y - 2) <= std::min(y1, Y + 40));
 }
 
-bool EnemyManager::IsAlive()
+bool EnemySkeleton::IsAlive()
 {
     return health > 0;
 }
 
-bool EnemyManager::IsNearPlayer()
+bool EnemySkeleton::IsNearPlayer()
 {
     int X = transform->x - player->xdif - 365;
     int Y = transform->y - player->ydif - 300;
-    return  X * X + Y * Y <= 250 * 250;
+    return  X * X + Y * Y <= attack_radius * attack_radius;
 }
 
-bool EnemyManager::IsNextToPlayer()
+bool EnemySkeleton::IsNextToPlayer()
 {
     int curx = transform->x - player->xdif;
     int cury = transform->y - player->ydif;
     return player->CollidePlayer(curx + 17, cury + 6, curx + 53, cury + 26);
 }
 
-void EnemyManager::DecHealth(int v)
+void EnemySkeleton::DecHealth(int v)
 {
     health -= v;
     health_bar->Reset(health);
