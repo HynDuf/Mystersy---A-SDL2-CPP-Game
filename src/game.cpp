@@ -6,6 +6,7 @@
 #include <enemy_generator.h>
 #include <player_skill_q.h>
 #include <arrow_direction.h>
+#include <shooter.h>
 
 EnemySkeleton *enemy;
 SDL_Renderer *Game::renderer = nullptr;
@@ -17,6 +18,7 @@ PlayerManager *player;
 PlayerSkillQ *player_skill_q;
 ArrowDirection *arrow_direction;
 EnemyGenerator *enemy_generator;
+Shooter *shooter;
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
     int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
@@ -49,6 +51,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     arrow_direction = new ArrowDirection();
     enemy_generator = new EnemyGenerator();
     map = new WorldMap();
+    shooter = new Shooter();
 }
 void Game::HandleEvents()
 {
@@ -73,6 +76,7 @@ void Game::Update()
     if (player->IsAlive() == false)
         is_running = false;
     player_skill_q->Update();
+    shooter->Update();
 }
 void Game::Render()
 {
@@ -80,6 +84,7 @@ void Game::Render()
     // Render something here
     map->RenderMap();
     player->Render();
+    shooter->Render();
     enemy_generator->Render();
     player->health_box->Render();
     player_skill_q->Render();

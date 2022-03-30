@@ -1,7 +1,7 @@
 #include <enemy_bat.h>
 #include <player_manager.h>
 #include <world_map.h>
-
+#include <shooter.h>
 EnemyBat::EnemyBat(int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 50, 28);
@@ -9,8 +9,9 @@ EnemyBat::EnemyBat(int x, int y)
     health_bar = new EnemyHealthBar("img/enemy/enemy_health_bar.png", transform, 56);
     health = 56;
     attack = 1;
-    attack_interval = 3;
-    attack_radius = 200;
+    attack_interval = 150;
+    attack_max_radius = 400;
+    attack_min_radius = 70;
     move_duration = 50;
     dx = dy = 0;
     AddAnimations();
@@ -32,9 +33,13 @@ void EnemyBat::Update()
     // Already checked IsInsideLivingZone() == true
     if (IsInsideMovingZone())
     {
-        if (IsNearPlayer()) // Let's attack player
+        if (IsInsideAttackZone()) // Let's attack player
         {
-            AttackPlayer();
+            if (--attack_interval == 0)
+            {
+                AttackPlayer();
+                attack_interval = 150;
+            }
         } 
         
         if (--move_duration == 0)
@@ -93,11 +98,12 @@ bool EnemyBat::IsAlive()
     return health > 0;
 }
 
-bool EnemyBat::IsNearPlayer()
+bool EnemyBat::IsInsideAttackZone()
 {
     int X = transform->x - player->xdif - 365;
     int Y = transform->y - player->ydif - 300;
-    return  X * X + Y * Y <= attack_radius * attack_radius;
+    int dist2 = X * X + Y * Y;
+    return attack_min_radius * attack_min_radius <= dist2 && dist2 <= attack_max_radius * attack_max_radius;
 }
 
 void EnemyBat::DecHealth(int v)
@@ -109,5 +115,5 @@ void EnemyBat::DecHealth(int v)
 
 void EnemyBat::AttackPlayer()
 {
-
+    shooter->AddNewBullet(transform->x + 5, transform->y + 5);
 }

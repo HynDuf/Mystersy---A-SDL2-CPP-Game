@@ -19,7 +19,7 @@ public:
     bool IsInsideLivingZone();
     bool IsInsideMovingZone();
     bool IsAlive();
-    bool IsNearPlayer();
+    bool IsInsideAttackZone();
     void DecHealth(int v);
     void AttackPlayer();
 
@@ -30,7 +30,8 @@ public:
     int health;
     int attack;
     int attack_interval;
-    int attack_radius;
+    int attack_max_radius;
+    int attack_min_radius;
 
 private:
     int move_duration;

@@ -34,8 +34,8 @@ void SpriteComponent::Update()
         src_rect.h = anim_height;
     }
     // NOTE: Update position of transform first
-    dest_rect.x = transform->x;
-    dest_rect.y = transform->y;
+    dest_rect.x = static_cast<int> (transform->x);
+    dest_rect.y = static_cast<int> (transform->y);
     dest_rect.h = transform->h;
     dest_rect.w = transform->w;
 }

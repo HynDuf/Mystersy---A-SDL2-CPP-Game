@@ -1,5 +1,5 @@
 #pragma once
-
+#include <math.h>
 // 2D point data types
 // Specifically for colliders of objects
 
@@ -30,14 +30,14 @@ struct Point {
 		return P(x * cos(a) - y * sin(a), x * sin(a) + y * cos(a)); }
 };
 
-/*
+/**
  * @return true iff p lies on the seg segment from s to e.
  */
 template<class P> bool onSegment(P s, P e, P p) {
 	return p.cross(s, e) == 0 && (s - p).dot(e - p) <= 0;
 }
 
-/*
+/**
  * @return whether 2 segments intersect
  */
 template<class P>
@@ -54,7 +54,7 @@ bool SegInterSeg(P a, P b, P c, P d) {
 	return false;
 }
 
-/*
+/**
  * Rectangle has bottom left corner 's' and top right corner 'e'.
  * @return Point 'p' is inside the rectangle or not 
  */
@@ -64,8 +64,8 @@ bool IsInsideRectangle(P s, P e, P p)
     return s.x <= p.x && p.x <= e.x && s.y <= p.y && p.y <= e.y;
 }
 
-/*
- * Does segment (seg_s, seg_e) intersect with rectangle (rect_s, rect_e)?
+/**
+ * @return Does segment (seg_s, seg_e) intersect with rectangle (rect_s, rect_e)?
  */
 template<class P>
 bool SegInterRectangle(P rect_s, P rect_e, P seg_s, P seg_e)

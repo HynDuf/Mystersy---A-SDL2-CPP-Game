@@ -49,8 +49,8 @@ void WorldMap::UpdateMap()
             player->sprite->ApplyAnimation("sword_left");
         for (EnemySkeleton *&e : enemy_generator->skeleton_container)
         {
-            int x0 = e->transform->x - player->xdif - dir.first * player->transform->speed + 20;
-            int y0 = e->transform->y - player->ydif - dir.second * player->transform->speed + 6;
+            int x0 = e->transform->x - player->xdif - dir.first * static_cast<int> (player->transform->speed) + 20;
+            int y0 = e->transform->y - player->ydif - dir.second * static_cast<int> (player->transform->speed) + 6;
             int x1 = x0 + 30;
             int y1 = y0 + 20;
             if (player->direction && player->CollideSwordRight(x0, y0, x1, y1))
@@ -71,8 +71,8 @@ void WorldMap::UpdateMap()
         dir = {-1, -1};
         player->direction = 0;
         player->sprite->ApplyAnimation("walk_left");
-        player->xdif -= player->transform->speed;
-        player->ydif -= player->transform->speed;
+        player->xdif -= static_cast<int> (player->transform->speed);
+        player->ydif -= static_cast<int> (player->transform->speed);
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_W])
@@ -80,8 +80,8 @@ void WorldMap::UpdateMap()
         dir = {1, -1};
         player->direction = 1;
         player->sprite->ApplyAnimation("walk_right");
-        player->xdif += player->transform->speed;
-        player->ydif -= player->transform->speed;
+        player->xdif += static_cast<int> (player->transform->speed);
+        player->ydif -= static_cast<int> (player->transform->speed);
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_S])
@@ -89,8 +89,8 @@ void WorldMap::UpdateMap()
         dir = {-1, 1};
         player->direction = 0;
         player->sprite->ApplyAnimation("walk_left");
-        player->xdif -= player->transform->speed;
-        player->ydif += player->transform->speed;
+        player->xdif -= static_cast<int> (player->transform->speed);
+        player->ydif += static_cast<int> (player->transform->speed);
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_S])
@@ -98,20 +98,20 @@ void WorldMap::UpdateMap()
         dir = {1, 1};
         player->direction = 1;
         player->sprite->ApplyAnimation("walk_right");
-        player->xdif += player->transform->speed;
-        player->ydif += player->transform->speed;
+        player->xdif += static_cast<int> (player->transform->speed);
+        player->ydif += static_cast<int> (player->transform->speed);
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_W])
     {
         dir = {0, -1};
-        player->ydif -= player->transform->speed;
+        player->ydif -= static_cast<int> (player->transform->speed);
         goto Next;
     }
     if (Game::keyboard_state[SDL_SCANCODE_S])
     {
         dir = {0, 1};
-        player->ydif += player->transform->speed;
+        player->ydif += static_cast<int> (player->transform->speed);
         goto Next;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A])
@@ -119,7 +119,7 @@ void WorldMap::UpdateMap()
         dir = {-1, 0};
         player->direction = 0;
         player->sprite->ApplyAnimation("walk_left");
-        player->xdif -= player->transform->speed;
+        player->xdif -= static_cast<int> (player->transform->speed);
         goto Finished;
     }
     if (Game::keyboard_state[SDL_SCANCODE_D])
@@ -127,7 +127,7 @@ void WorldMap::UpdateMap()
         dir = {1, 0};
         player->direction = 1;
         player->sprite->ApplyAnimation("walk_right");
-        player->xdif += player->transform->speed;
+        player->xdif += static_cast<int> (player->transform->speed);
         goto Finished;
     }
     Next:;
@@ -139,8 +139,8 @@ void WorldMap::UpdateMap()
     bool valid_move = true;
     for (std::array<int, 3> &tile : tiles_near_player)
     {
-        int x0 = tile[0] - dir.first * player->transform->speed + (tile[2] == 64 ? 8: 2);
-        int y0 = tile[1] - dir.second * player->transform->speed + (tile[2] == 64 ? 10 : 3);
+        int x0 = tile[0] - dir.first * static_cast<int> (player->transform->speed) + (tile[2] == 64 ? 8: 2);
+        int y0 = tile[1] - dir.second * static_cast<int> (player->transform->speed) + (tile[2] == 64 ? 10 : 3);
         int x1 = x0 + tile[2] - (tile[2] == 64 ? 8 : 4);
         int y1 = y0 + tile[2] - (tile[2] == 64 ? 30 : 20);
         if (player->CollidePlayer(x0, y0, x1, y1))
@@ -152,8 +152,8 @@ void WorldMap::UpdateMap()
     if (valid_move == true)
         for (EnemySkeleton *&e : enemy_generator->skeleton_container)
         {
-            int x0 = e->transform->x - player->xdif - dir.first * player->transform->speed + 20;
-            int y0 = e->transform->y - player->ydif - dir.second * player->transform->speed + 6;
+            int x0 = e->transform->x - player->xdif - dir.first * static_cast<int> (player->transform->speed) + 20;
+            int y0 = e->transform->y - player->ydif - dir.second * static_cast<int> (player->transform->speed) + 6;
             int x1 = x0 + 30;
             int y1 = y0 + 20;
             if (player->CollidePlayer(x0, y0, x1, y1))
@@ -164,8 +164,8 @@ void WorldMap::UpdateMap()
         }
     if (valid_move == false)
     {
-        player->xdif -= dir.first * player->transform->speed;
-        player->ydif -= dir.second * player->transform->speed;
+        player->xdif -= dir.first * static_cast<int> (player->transform->speed);
+        player->ydif -= dir.second * static_cast<int> (player->transform->speed);
         if (player->direction)
             player->sprite->ApplyAnimation("idle_right");
         else 
