@@ -10,9 +10,8 @@ public:
     ~PlayerSkillE();
     void Update();
     void Render();
-    void ExecuteSkill(int dx, int dy);
-    void UpdateHitEnemy();
-    bool IsCollide(int x0, int y0, int x1, int y1);
+    void ExecuteSkill();
+    int duration; // frames
 private:
 
     SDL_Texture *circle_on, *circle_off;
@@ -21,9 +20,7 @@ private:
     SDL_Rect circle;
     int cooldown; // frames
 
-    int duration; // frames
 
-    bool skill_used;
 
 
 };

@@ -23,7 +23,6 @@ private:
 
     int duration; // frames
 
-    bool skill_used;
 
 
 };

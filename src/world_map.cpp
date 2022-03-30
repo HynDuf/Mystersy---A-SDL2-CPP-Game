@@ -2,6 +2,7 @@
 #include <player_manager.h>
 #include <enemy_generator.h>
 #include <player_skill_q.h>
+#include <player_skill_e.h>
 #include <arrow_direction.h>
 
 WorldMap::WorldMap()
@@ -176,6 +177,8 @@ void WorldMap::UpdateMap()
     arrow_direction->Update();
     if (Game::keyboard_state[SDL_SCANCODE_Q])
         player_skill_q->ExecuteSkill(arrow_direction->dx, arrow_direction->dy);
+    if (Game::keyboard_state[SDL_SCANCODE_E])
+        player_skill_e->ExecuteSkill();
 }
 
 void WorldMap::RenderMap()

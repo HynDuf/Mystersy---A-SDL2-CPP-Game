@@ -1,5 +1,6 @@
 #include <player_manager.h>
 #include <texture_manager.h>
+#include <player_skill_e.h>
 PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
 {
     xdif = ydif = 0;
@@ -67,4 +68,10 @@ bool PlayerManager::CollideSwordLeft(int x0, int y0, int x1, int y1)
 bool PlayerManager::IsAlive()
 {
     return health > 0;
+}
+
+void PlayerManager::DecHealth(int damage)
+{
+    if (player_skill_e->duration == 0)
+        player->health -= damage;
 }

@@ -49,7 +49,7 @@ void EnemySkeleton::Update()
                 if (--attack_interval == 0)
                 {
                     attack_interval = 3;
-                    player->health -= attack;
+                    player->DecHealth(attack);
                 }
 
             }

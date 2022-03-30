@@ -5,6 +5,7 @@
 #include <texture_manager.h>
 #include <enemy_generator.h>
 #include <player_skill_q.h>
+#include <player_skill_e.h>
 #include <arrow_direction.h>
 #include <shooter.h>
 
@@ -16,6 +17,7 @@ const Uint8 *Game::keyboard_state = SDL_GetKeyboardState(NULL);
 WorldMap *map;
 PlayerManager *player;
 PlayerSkillQ *player_skill_q;
+PlayerSkillE *player_skill_e;
 ArrowDirection *arrow_direction;
 EnemyGenerator *enemy_generator;
 Shooter *shooter;
@@ -48,6 +50,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     is_running = true;
     player = new PlayerManager("img/player/player.png", 365, 300);
     player_skill_q = new PlayerSkillQ();
+    player_skill_e = new PlayerSkillE();
     arrow_direction = new ArrowDirection();
     enemy_generator = new EnemyGenerator();
     map = new WorldMap();
@@ -76,6 +79,7 @@ void Game::Update()
     if (player->IsAlive() == false)
         is_running = false;
     player_skill_q->Update();
+    player_skill_e->Update();
     shooter->Update();
 }
 void Game::Render()
@@ -88,6 +92,7 @@ void Game::Render()
     enemy_generator->Render();
     player->health_box->Render();
     player_skill_q->Render();
+    player_skill_e->Render();
     arrow_direction->Render();
     if (is_running == false)
         RenderGameOver();

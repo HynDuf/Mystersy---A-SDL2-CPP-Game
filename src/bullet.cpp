@@ -28,7 +28,7 @@ void Bullet::Update()
 
     if (CollidePlayer())
     {
-        player->health -= damage;
+        player->DecHealth(damage);
         active = false;
     }
     if (--duration == 0)

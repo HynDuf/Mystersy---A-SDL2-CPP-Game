@@ -4,7 +4,6 @@
 #include <point_2d.h>
 PlayerSkillQ::PlayerSkillQ()
 {
-    skill_used = false;
     cooldown = 0;
     duration = 0;
 
@@ -56,7 +55,6 @@ void PlayerSkillQ::ExecuteSkill(int dx, int dy)
     }
     if (cooldown > 0)
         return;
-    skill_used = true;
     duration = 40;
     cooldown = 50;
     transform->vx = dx;
