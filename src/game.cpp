@@ -8,6 +8,7 @@
 #include <player_skill_e.h>
 #include <arrow_direction.h>
 #include <shooter.h>
+#include <level_manager.h>
 
 EnemySkeleton *enemy;
 SDL_Renderer *Game::renderer = nullptr;
@@ -20,6 +21,7 @@ PlayerSkillQ *player_skill_q;
 PlayerSkillE *player_skill_e;
 ArrowDirection *arrow_direction;
 EnemyGenerator *enemy_generator;
+LevelManager *level_manager;
 Shooter *shooter;
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -37,7 +39,6 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
         return;
     }
 
-    // Initialize SDL_ttf
     if (TTF_Init() == -1)
     {
         printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
@@ -55,6 +56,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     enemy_generator = new EnemyGenerator();
     map = new WorldMap();
     shooter = new Shooter();
+    level_manager = new LevelManager();
 }
 void Game::HandleEvents()
 {
@@ -81,6 +83,8 @@ void Game::Update()
     player_skill_q->Update();
     player_skill_e->Update();
     shooter->Update();
+    level_manager->Update();
+    player->stats_bar->Update();
 }
 void Game::Render()
 {
@@ -90,7 +94,7 @@ void Game::Render()
     player->Render();
     shooter->Render();
     enemy_generator->Render();
-    player->health_box->Render();
+    player->stats_bar->Render();
     player_skill_q->Render();
     player_skill_e->Render();
     arrow_direction->Render();

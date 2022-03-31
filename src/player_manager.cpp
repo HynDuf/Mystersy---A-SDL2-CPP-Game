@@ -6,9 +6,13 @@ PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
     xdif = ydif = 0;
     transform = new TransformComponent(orig_x, orig_y, 3, 70, 45);
     sprite = new SpriteComponent(texture_file, transform, true);
-    health_box = new PlayerHealthBox(100);
+    stats_bar = new PlayerStatsBar();
     direction = 1;
     health = 100;
+    full_health = 100;
+    xp = 0;
+    full_xp = 10;
+    level = 1;
     attack = 2;
     AddAnimations();
     sprite->ApplyAnimation("idle_right");
@@ -17,7 +21,6 @@ PlayerManager::~PlayerManager() {}
 void PlayerManager::Update()
 {
     health = std::max(health, 0);
-    health_box->Update(player->health);
     sprite->Update();
 }
 

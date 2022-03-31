@@ -8,6 +8,7 @@ EnemySkeleton::EnemySkeleton(int x, int y)
     sprite = new SpriteComponent("img/enemy/enemy_skeleton.png", transform, true);
     health_bar = new EnemyHealthBar("img/enemy/enemy_health_bar.png", transform, 56);
     health = 56;
+    xp = 1;
     attack = 1;
     attack_interval = 3;
     attack_radius = 200;
@@ -204,4 +205,6 @@ void EnemySkeleton::DecHealth(int v)
 {
     health -= v;
     health_bar->Reset(health);
+    if (health <= 0)
+        player->xp += xp;
 }

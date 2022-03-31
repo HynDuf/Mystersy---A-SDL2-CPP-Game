@@ -6,6 +6,8 @@ PlayerSkillQ::PlayerSkillQ()
 {
     cooldown = 0;
     duration = 0;
+    cooldown_base = 300;
+    duration_base = 40;
 
     circle_on = TextureManager::LoadTexture("img/player/q_circle_on.png");
     circle_off = TextureManager::LoadTexture("img/player/q_circle_off.png");
@@ -55,8 +57,8 @@ void PlayerSkillQ::ExecuteSkill(int dx, int dy)
     }
     if (cooldown > 0)
         return;
-    duration = 40;
-    cooldown = 50;
+    duration = duration_base;
+    cooldown = cooldown_base;
     transform->vx = dx;
     transform->vy = dy;
     if (dx == 1 && dy == 0) // E
@@ -228,7 +230,7 @@ void PlayerSkillQ::UpdateHitEnemy()
             int y1 = y0 + 30;
             if (IsCollide(x0, y0, x1, y1))
             {
-                e->DecHealth(player->attack);
+                e->DecHealth(2 * player->attack);
             } 
         }
     for (EnemyBat *&e : enemy_generator->bat_container)
@@ -240,7 +242,7 @@ void PlayerSkillQ::UpdateHitEnemy()
             int y1 = y0 + 20;
             if (IsCollide(x0, y0, x1, y1))
             {
-                e->DecHealth(player->attack);
+                e->DecHealth(2 * player->attack);
             } 
         }
 }

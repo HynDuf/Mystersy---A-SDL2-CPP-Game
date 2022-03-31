@@ -30,6 +30,7 @@ public:
     EnemyHealthBar *health_bar;
 
     int health;
+    int xp;
     int attack;
     int attack_interval;
     int attack_radius;

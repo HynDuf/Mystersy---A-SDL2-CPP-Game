@@ -12,6 +12,8 @@ public:
     void Render();
     void ExecuteSkill();
     int duration; // frames
+    int cooldown_base; // frames
+    int duration_base; // frames
 private:
 
     SDL_Texture *circle_on, *circle_off;
@@ -19,10 +21,6 @@ private:
     TransformComponent *transform;
     SDL_Rect circle;
     int cooldown; // frames
-
-
-
-
 };
 
 extern PlayerSkillE *player_skill_e;

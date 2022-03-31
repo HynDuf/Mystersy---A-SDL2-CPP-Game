@@ -2,7 +2,7 @@
 #include <transform_component.h>
 #include <sprite_component.h>
 #include <animation.h>
-#include <player_health_box.h>
+#include <player_stats_bar.h>
 #include <player_skill_q.h>
 
 class PlayerManager
@@ -24,12 +24,15 @@ public:
     // How far player has moved?
     int xdif, ydif;
 
-    int health;
+    int health, full_health;
+    int xp, full_xp;
+    int level;
+    
     int attack;
 
     SpriteComponent *sprite;
     TransformComponent *transform;
-    PlayerHealthBox *health_box;
+    PlayerStatsBar *stats_bar;
     // 1 is right, 0 is left
     bool direction;
 };

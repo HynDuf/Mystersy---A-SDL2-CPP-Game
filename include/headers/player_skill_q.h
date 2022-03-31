@@ -13,6 +13,8 @@ public:
     void ExecuteSkill(int dx, int dy);
     void UpdateHitEnemy();
     bool IsCollide(int x0, int y0, int x1, int y1);
+    int cooldown_base; // frames
+    int duration_base; // frames
 private:
 
     SDL_Texture *circle_on, *circle_off;
@@ -20,11 +22,7 @@ private:
     TransformComponent *transform;
     SDL_Rect circle;
     int cooldown; // frames
-
     int duration; // frames
-
-
-
 };
 
 extern PlayerSkillQ *player_skill_q;

@@ -8,6 +8,7 @@ EnemyBat::EnemyBat(int x, int y)
     sprite = new SpriteComponent("img/enemy/enemy_bat.png", transform, true);
     health_bar = new EnemyHealthBar("img/enemy/enemy_health_bar.png", transform, 56);
     health = 56;
+    xp = 2;
     attack = 1;
     attack_interval = 150;
     attack_max_radius = 400;
@@ -110,6 +111,8 @@ void EnemyBat::DecHealth(int v)
 {
     health -= v;
     health_bar->Reset(health);
+    if (health <= 0)
+        player->xp += xp;
 }
 
 
