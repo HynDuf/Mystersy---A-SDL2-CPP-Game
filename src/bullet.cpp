@@ -5,7 +5,7 @@ Bullet::Bullet(int x, int y)
 {
 
     transform = new TransformComponent(x, y, 3.5, 20, 20);
-    sprite = new SpriteComponent("img/game/shooting_ball.png", transform, false);
+    sprite = new SpriteComponent("img/game/shooting_ball_1.png", transform, false);
 
     damage = 10;
     active = true;

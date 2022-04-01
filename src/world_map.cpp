@@ -4,7 +4,7 @@
 #include <player_skill_q.h>
 #include <player_skill_e.h>
 #include <arrow_direction.h>
-
+#include <boss.h>
 WorldMap::WorldMap()
 {
     perlin_noise = new PerlinNoise();
@@ -198,7 +198,7 @@ void WorldMap::RenderMap()
         for (int y = y_left - 32, y_tile = Y_tile - 1; y < 640; y += 32, y_tile++)
     {
         int tile = GetTileType(x_tile, y_tile);
-        if (InsidePlayerStartingZone(x, y))
+        if (InsideGrassZone(x, y))
             tile = 2; // set to grass
         tmp_dest.x = x;
         tmp_dest.y = y;
@@ -226,10 +226,8 @@ void WorldMap::RenderMap()
     
 }
 
-bool WorldMap::InsidePlayerStartingZone(int x, int y)
+bool WorldMap::InsideGrassZone(int x, int y)
 {
-    return ((x + player->xdif) <= 450)
-        && ((x + player->xdif) >= 200)
-        && ((y + player->ydif) <= 400)
-        && ((y + player->ydif) >= 150);
+    return player->IsInsideStartingZone(x, y)
+        || boss->IsInsideStartingZone(x, y);
 }

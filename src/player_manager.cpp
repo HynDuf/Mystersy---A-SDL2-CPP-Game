@@ -78,3 +78,11 @@ void PlayerManager::DecHealth(int damage)
     if (player_skill_e->duration == 0)
         player->health -= damage;
 }
+
+bool PlayerManager::IsInsideStartingZone(int x, int y)
+{
+    return ((x + player->xdif) <= 450)
+        && ((x + player->xdif) >= 200)
+        && ((y + player->ydif) <= 400)
+        && ((y + player->ydif) >= 150);
+}

@@ -42,13 +42,13 @@ void EnemyGenerator::Update()
                         int tile1 = map->GetTileType(x_tile - 1, y_tile);
                         int tile2 = map->GetTileType(x_tile, y_tile - 1);
                         int tile3 = map->GetTileType(x_tile - 1, y_tile - 1);
-                        if (map->InsidePlayerStartingZone(x, y))
+                        if (map->InsideGrassZone(x, y))
                             tile0 = 2; // set to grass
-                        if (map->InsidePlayerStartingZone(x - 32, y))
+                        if (map->InsideGrassZone(x - 32, y))
                             tile1 = 2; // set to grass
-                        if (map->InsidePlayerStartingZone(x, y - 32))
+                        if (map->InsideGrassZone(x, y - 32))
                             tile2 = 2; // set to grass
-                        if (map->InsidePlayerStartingZone(x - 32, y - 32))
+                        if (map->InsideGrassZone(x - 32, y - 32))
                             tile3 = 2; // set to grass
                         int mx = std::max({tile0, tile1, tile2, tile3});
                         int mn = std::min({tile0, tile1, tile2, tile3});

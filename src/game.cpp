@@ -9,6 +9,7 @@
 #include <arrow_direction.h>
 #include <shooter.h>
 #include <level_manager.h>
+#include <boss.h>
 
 EnemySkeleton *enemy;
 SDL_Renderer *Game::renderer = nullptr;
@@ -23,6 +24,7 @@ ArrowDirection *arrow_direction;
 EnemyGenerator *enemy_generator;
 LevelManager *level_manager;
 Shooter *shooter;
+Boss *boss;
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
     int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
@@ -57,6 +59,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     map = new WorldMap();
     shooter = new Shooter();
     level_manager = new LevelManager();
+    boss = new Boss();
 }
 void Game::HandleEvents()
 {
@@ -85,6 +88,7 @@ void Game::Update()
     shooter->Update();
     level_manager->Update();
     player->stats_bar->Update();
+    boss->Update();
 }
 void Game::Render()
 {
@@ -94,10 +98,12 @@ void Game::Render()
     player->Render();
     shooter->Render();
     enemy_generator->Render();
+    boss->Render();
     player->stats_bar->Render();
     player_skill_q->Render();
     player_skill_e->Render();
     arrow_direction->Render();
+
     if (is_running == false)
         RenderGameOver();
     

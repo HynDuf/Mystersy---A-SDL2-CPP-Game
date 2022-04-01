@@ -156,7 +156,7 @@ bool EnemySkeleton::CheckMoveCollide()
         for (int y = y_left, y_tile = Y_tile; y_tile < Y_tile + 8; y += 32, y_tile++)
     {
         int tile = map->GetTileType(x_tile, y_tile);
-        if (map->InsidePlayerStartingZone(x, y))
+        if (map->InsideGrassZone(x, y))
             continue; // tile = 2; // set to grass
         int sz = (tile == 5 ? 64 : 32);
         int x0 = x + (sz == 64 ? 4: 0);
