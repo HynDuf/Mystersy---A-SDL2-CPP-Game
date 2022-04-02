@@ -12,6 +12,9 @@ Boss::Boss()
 
     transform = new TransformComponent(start_x, start_y, 0, 90, 90);
     sprite = new SpriteComponent("img/enemy/boss.png", transform, true);
+    health = 10000;
+    health_bar = new EnemyHealthBar(transform, health);
+    health_bar->SetDestSize(80, 7);
     AddAnimations();
     sprite->ApplyAnimation("walk_right");
 
@@ -38,13 +41,14 @@ void Boss::Update()
     for (FireTile *&f : skill_fire.fire_tiles)
         f->Update();
     UpdateShoot();
+    health_bar->Update(-5, -20);
 }
 void Boss::Render()
 {
     if (!IsInsideActiveZone()) 
         return;
     sprite->Draw(-player->xdif, -player->ydif);
-    
+    health_bar->Draw(-player->xdif, -player->ydif);
 }
 void Boss::RenderFire()
 {
@@ -76,6 +80,7 @@ void Boss::AddAnimations()
 void Boss::DecHealth(int v)
 {
     health -= v;
+    health_bar->Reset(health);
 }
 
 void Boss::UpdateShoot()
@@ -129,4 +134,9 @@ void Boss::ExecuteSpawnMonster()
         enemy_generator->AddNewBat(transform->x + 40, transform->y + 40);
         enemy_generator->AddNewSkeleton(transform->x + 40, transform->y + 40);
     }
+}
+
+bool Boss::IsAlive()
+{
+    return health > 0;
 }

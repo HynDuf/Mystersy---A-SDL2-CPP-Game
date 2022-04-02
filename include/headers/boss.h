@@ -3,6 +3,7 @@
 #include <sprite_component.h>
 #include <fire_tile.h>
 #include <vector>
+#include <enemy_health_bar.h>
 class Boss
 {
 public:
@@ -14,10 +15,11 @@ public:
     void Render();
     void RenderFire();
     void DecHealth(int v);
+    bool IsInsideActiveZone();
     int start_x, start_y;
+    TransformComponent *transform;
 
 private:
-    bool IsInsideActiveZone();
     void ExecuteSkill();
     void AddAnimations();
     void ExecuteTeleport();
@@ -25,6 +27,7 @@ private:
     void ExecuteShootFireBall();
     void ExecuteSpawnMonster();
     void UpdateShoot();
+    bool IsAlive();
     // Skill types
     static const int TELEPORT = 0;
     static const int FIREWALL = 1;
@@ -33,6 +36,8 @@ private:
     //
 
     int health;
+    
+    EnemyHealthBar *health_bar;
 
     // Duration for using next skill
     int skill_duration;
@@ -65,7 +70,6 @@ private:
     } skill_spawn;
 
     SpriteComponent *sprite;
-    TransformComponent *transform;
 };  
 
 extern Boss *boss;

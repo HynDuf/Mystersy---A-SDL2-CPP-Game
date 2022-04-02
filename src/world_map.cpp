@@ -63,7 +63,21 @@ void WorldMap::UpdateMap()
                 e->DecHealth(player->attack);
             }
         }
-
+        if (boss->IsInsideActiveZone())
+        {
+            int x0 = boss->transform->x - player->xdif + 20;
+            int y0 = boss->transform->y - player->ydif + 30;
+            int x1 = x0 + 50;
+            int y1 = y0 + 60;
+            if (player->direction && player->CollideSwordRight(x0, y0, x1, y1))
+            {
+                boss->DecHealth(player->attack);
+                
+            } else if (!player->direction && player->CollideSwordLeft(x0, y0, x1, y1))
+            {
+                boss->DecHealth(player->attack);
+            }
+        }
     
         return;
     }

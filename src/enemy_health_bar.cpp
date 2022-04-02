@@ -1,8 +1,9 @@
 #include <enemy_health_bar.h>
 
-EnemyHealthBar::EnemyHealthBar(const char *texture_file, TransformComponent *_transform, int _full_health)
+// TODO: Optimize health bars
+EnemyHealthBar::EnemyHealthBar(TransformComponent *_transform, int _full_health)
 {
-    SetTexture(texture_file);
+    SetTexture("img/enemy/enemy_health_bar.png");
     transform = _transform;
     src_rect.x = src_rect.y = 0;
     src_rect.w = 20;
@@ -22,7 +23,11 @@ void EnemyHealthBar::SetTexture(const char *texture_file)
 {
     texture = TextureManager::LoadTexture(texture_file);
 }
-
+void EnemyHealthBar::SetDestSize(int _w, int _h)
+{
+    dest_rect.w = _w;
+    dest_rect.h = _h;
+}
 void EnemyHealthBar::Reset(int health)
 {
     appear_duration = 70;

@@ -6,7 +6,7 @@ EnemySkeleton::EnemySkeleton(int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
     sprite = new SpriteComponent("img/enemy/enemy_skeleton.png", transform, true);
-    health_bar = new EnemyHealthBar("img/enemy/enemy_health_bar.png", transform, 56);
+    health_bar = new EnemyHealthBar(transform, 56);
     health = 56;
     xp = 1;
     attack = 1;

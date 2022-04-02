@@ -2,6 +2,7 @@
 #include <player_manager.h>
 #include <enemy_generator.h>
 #include <point_2d.h>
+#include <boss.h>
 PlayerSkillQ::PlayerSkillQ()
 {
     cooldown = 0;
@@ -178,8 +179,8 @@ bool PlayerSkillQ::IsCollide(int x0, int y0, int x1, int y1)
     {
         s = Point<int> (curx, cury);
         e = Point<int> (curx + 70, cury);
-        s1 = Point<int> (curx, cury + 18);
-        e1 = Point<int> (curx + 70, cury + 18);
+        s1 = Point<int> (curx, cury + 20);
+        e1 = Point<int> (curx + 70, cury + 20);
     } else if (dx == -1 && dy == 0) // W
     {   
         s = Point<int> (curx + 2, cury);
@@ -190,8 +191,8 @@ bool PlayerSkillQ::IsCollide(int x0, int y0, int x1, int y1)
     {
         s = Point<int> (curx, cury + 2);
         e = Point<int> (curx + 70, cury + 2);
-        s1 = Point<int> (curx, cury + 20);
-        e1 = Point<int> (curx + 70, cury + 20);
+        s1 = Point<int> (curx, cury + 22);
+        e1 = Point<int> (curx + 70, cury + 22);
     } else if (dx == -1 && dy == -1) // NW
     {
         s = Point<int> (curx, cury + 45);
@@ -245,4 +246,15 @@ void PlayerSkillQ::UpdateHitEnemy()
                 e->DecHealth(2 * player->attack);
             } 
         }
+    if (boss->IsInsideActiveZone())
+    {
+        int x0 = boss->transform->x + 20;
+        int y0 = boss->transform->y;
+        int x1 = x0 + 60;
+        int y1 = y0 + 90;
+        if (IsCollide(x0, y0, x1, y1))
+        {
+            boss->DecHealth(player->attack);
+        } 
+    }   
 }

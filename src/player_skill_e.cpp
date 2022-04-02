@@ -7,8 +7,7 @@ PlayerSkillE::PlayerSkillE()
     cooldown = 0;
     cooldown_base = 450;
     duration = 0;
-    // duration_base = 70;
-    duration_base = 700000;
+    duration_base = 70;
 
     circle_on = TextureManager::LoadTexture("img/player/e_circle_on.png");
     circle_off = TextureManager::LoadTexture("img/player/e_circle_off.png");

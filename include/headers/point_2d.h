@@ -70,7 +70,7 @@ bool IsInsideRectangle(P s, P e, P p)
 template<class P>
 bool SegInterRectangle(P rect_s, P rect_e, P seg_s, P seg_e)
 {
-    if (IsInsideRectangle(seg_s, rect_s, rect_e) || IsInsideRectangle(seg_e, rect_s, rect_e))
+    if (IsInsideRectangle(rect_s, rect_e, seg_s) || IsInsideRectangle(rect_s, rect_e, seg_e))
         return true;
 
     if (SegInterSeg(seg_s, seg_e, rect_s, P(rect_s.x, rect_e.y))
