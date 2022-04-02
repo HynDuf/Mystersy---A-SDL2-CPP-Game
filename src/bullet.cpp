@@ -13,7 +13,8 @@ Bullet::Bullet(int x, int y)
     // * Calculate vector direction
     int screenX = x - player->xdif, screenY = y - player->ydif;
     Point<double> vec(400 - screenX, 320 - screenY);
-    double dist = vec.dist(); // ! 'dist' should be > 64
+    double dist = vec.dist();
+    if (dist < 0.5) dist = 0.5;
     vec = vec / dist;
 
     transform->SetDir(vec.x, vec.y);

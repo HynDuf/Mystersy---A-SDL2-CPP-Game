@@ -85,16 +85,17 @@ void Game::Update()
         is_running = false;
     player_skill_q->Update();
     player_skill_e->Update();
-    shooter->Update();
+    boss->Update();
     level_manager->Update();
     player->stats_bar->Update();
-    boss->Update();
+    shooter->Update();
 }
 void Game::Render()
 {
     SDL_RenderClear(renderer);
     // Render something here
     map->RenderMap();
+    boss->RenderFire();
     player->Render();
     shooter->Render();
     enemy_generator->Render();

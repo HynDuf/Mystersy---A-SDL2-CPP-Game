@@ -1,6 +1,8 @@
 #pragma once
 #include <transform_component.h>
 #include <sprite_component.h>
+#include <fire_tile.h>
+#include <vector>
 class Boss
 {
 public:
@@ -10,9 +12,19 @@ public:
     bool IsInsideStartingZone(int x, int y);
     void Update();
     void Render();
-    void AddAnimations();
+    void RenderFire();
     void DecHealth(int v);
+    int start_x, start_y;
+
 private:
+    bool IsInsideActiveZone();
+    void ExecuteSkill();
+    void AddAnimations();
+    void ExecuteTeleport();
+    void ExecuteFirewall();
+    void ExecuteShootFireBall();
+    void ExecuteSpawnMonster();
+    void UpdateShoot();
     // Skill types
     static const int TELEPORT = 0;
     static const int FIREWALL = 1;
@@ -30,29 +42,30 @@ private:
 
     struct 
     {
-        int cooldown;
-        int dx, dy;
-        int vx, vy;
+
     } skill_tele;
 
     struct 
     {
-        int cooldown;   
+        int damage = 3;
+        int duration = 1000;   
+        int number = 30;
+        std::vector<FireTile*> fire_tiles;
     } skill_fire;
 
     struct 
     {
-        int cooldown;
+        int duration = 0;
+        int interval = 15;
     } skill_shoot;
 
     struct 
     {
-        int cooldown;
+        int number = 5;
     } skill_spawn;
 
     SpriteComponent *sprite;
     TransformComponent *transform;
-    int start_x, start_y;
 };  
 
 extern Boss *boss;
