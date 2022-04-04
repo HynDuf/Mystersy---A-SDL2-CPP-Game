@@ -5,6 +5,7 @@
 #include <player_skill_e.h>
 #include <arrow_direction.h>
 #include <boss.h>
+#include <boss_guider.h>
 WorldMap::WorldMap()
 {
     perlin_noise = new PerlinNoise();
@@ -193,6 +194,8 @@ void WorldMap::UpdateMap()
         player_skill_q->ExecuteSkill(arrow_direction->dx, arrow_direction->dy);
     if (Game::keyboard_state[SDL_SCANCODE_E])
         player_skill_e->ExecuteSkill();
+    if (Game::keyboard_state[SDL_SCANCODE_M])
+        boss_guider->active = true;
 }
 
 void WorldMap::RenderMap()

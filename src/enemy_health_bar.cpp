@@ -21,6 +21,7 @@ EnemyHealthBar::EnemyHealthBar(TransformComponent *_transform, int _w, int _h, i
 EnemyHealthBar::~EnemyHealthBar()
 {
     SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(texture_background);
 }
 void EnemyHealthBar::SetTexture()
 {

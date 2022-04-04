@@ -10,6 +10,7 @@
 #include <shooter.h>
 #include <level_manager.h>
 #include <boss.h>
+#include <boss_guider.h>
 
 EnemySkeleton *enemy;
 SDL_Renderer *Game::renderer = nullptr;
@@ -25,6 +26,7 @@ EnemyGenerator *enemy_generator;
 LevelManager *level_manager;
 Shooter *shooter;
 Boss *boss;
+BossGuider *boss_guider;
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
     int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
@@ -60,6 +62,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     shooter = new Shooter();
     level_manager = new LevelManager();
     boss = new Boss();
+    boss_guider = new BossGuider();
 }
 void Game::HandleEvents()
 {
@@ -89,6 +92,7 @@ void Game::Update()
     level_manager->Update();
     player->stats_bar->Update();
     shooter->Update();
+    boss_guider->Update();
 }
 void Game::Render()
 {
@@ -104,6 +108,7 @@ void Game::Render()
     player_skill_q->Render();
     player_skill_e->Render();
     arrow_direction->Render();
+    boss_guider->Render();
 
     if (is_running == false)
         RenderGameOver();

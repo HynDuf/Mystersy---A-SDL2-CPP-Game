@@ -5,8 +5,8 @@
 #include <enemy_generator.h>
 Boss::Boss()
 {
-    start_x = (rand() % 2 ? 1 : -1) * (rand() % 109);
-    start_y = (rand() % 2 ? 1 : -1) * (rand() % 177);
+    start_x = (rand() % 2 ? 1 : -1) * (rand() % 20009);
+    start_y = (rand() % 2 ? 1 : -1) * (rand() % 20077);
     cur_skill = 0;
     skill_duration = 500;
 
@@ -132,8 +132,10 @@ void Boss::ExecuteSpawnMonster()
 {
     for (int i = 0; i < skill_spawn.number; i++)
     {
-        enemy_generator->AddNewBat(transform->x + 40, transform->y + 40);
-        enemy_generator->AddNewSkeleton(transform->x + 40, transform->y + 40);
+        if (enemy_generator->bat_container.size() < 50) 
+            enemy_generator->AddNewBat(transform->x + 40, transform->y + 40);
+        if (enemy_generator->skeleton_container.size() < 50) 
+            enemy_generator->AddNewSkeleton(transform->x + 40, transform->y + 40);
     }
 }
 
