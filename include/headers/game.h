@@ -15,8 +15,10 @@ public:
     void Update();
     void Render();
     void RenderGameOver();
+    void RenderGameWon();
     void Clean();
     bool Running() {return is_running;}
+    bool Won();
     static SDL_Renderer *renderer;
     static SDL_Event event;
     static const Uint8 *keyboard_state;

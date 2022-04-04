@@ -112,6 +112,8 @@ void Game::Render()
 
     if (is_running == false)
         RenderGameOver();
+    if (Won())
+        RenderGameWon();
     
     SDL_RenderPresent(renderer);
 }
@@ -125,6 +127,20 @@ void Game::RenderGameOver()
     dest_rect_tmp.h = 240;
     TextureManager::Draw(texture, dest_rect_tmp);
 }
+void Game::RenderGameWon()
+{
+    SDL_Texture *texture = TextureManager::LoadTexture("img/game/gamewon.png");
+    SDL_Rect dest_rect_tmp;
+    dest_rect_tmp.x = 100;
+    dest_rect_tmp.y = 150;
+    dest_rect_tmp.w = 600;
+    dest_rect_tmp.h = 340;
+    TextureManager::Draw(texture, dest_rect_tmp);
+}
+bool Game::Won()
+{
+    return !boss->IsAlive();
+}
 void Game::Clean()
 {
     SDL_DestroyWindow(window);
@@ -134,3 +150,4 @@ void Game::Clean()
     TTF_Quit();
     std::cout << "Game cleaned" << std::endl;
 }
+

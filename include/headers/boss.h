@@ -16,6 +16,7 @@ public:
     void RenderFire();
     void DecHealth(int v);
     bool IsInsideActiveZone();
+    bool IsAlive();
     int start_x, start_y;
     TransformComponent *transform;
 
@@ -27,7 +28,6 @@ private:
     void ExecuteShootFireBall();
     void ExecuteSpawnMonster();
     void UpdateShoot();
-    bool IsAlive();
     // Skill types
     static const int TELEPORT = 0;
     static const int FIREWALL = 1;
