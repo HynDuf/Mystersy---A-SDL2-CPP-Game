@@ -6,7 +6,7 @@
 class Bullet
 {
 public:
-    Bullet(int x, int y);
+    Bullet(int x, int y, bool advanced);
     ~Bullet();
     void Update();
     void Render();

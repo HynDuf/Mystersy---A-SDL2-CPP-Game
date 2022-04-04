@@ -1,37 +1,39 @@
 #include <enemy_health_bar.h>
 
 // TODO: Optimize health bars
-EnemyHealthBar::EnemyHealthBar(TransformComponent *_transform, int _full_health)
+EnemyHealthBar::EnemyHealthBar(TransformComponent *_transform, int _w, int _h, int _full_health)
 {
-    SetTexture("img/enemy/enemy_health_bar.png");
+    SetTexture();
     transform = _transform;
     src_rect.x = src_rect.y = 0;
-    src_rect.w = 20;
-    src_rect.h = 4;
-    dest_rect.w = 25;
-    dest_rect.h = 7;
-    num_partitions = 8;
+    base_src_width = 278;
+    src_rect.w = 278;
+    src_rect.h = 35;
+    base_dest_width = _w;
+    dest_rect.w = _w;
+    dest_rect.h = _h;
+    full_health = _full_health;
     appear_duration = 0;
-    // ! _full_health has to be divided by num_partitions
-    health_each = _full_health / num_partitions;
+
+    dest_rect_bgr.w = _w + 4;
+    dest_rect_bgr.h = _h + 4;
 }
 EnemyHealthBar::~EnemyHealthBar()
 {
     SDL_DestroyTexture(texture);
 }
-void EnemyHealthBar::SetTexture(const char *texture_file)
+void EnemyHealthBar::SetTexture()
 {
-    texture = TextureManager::LoadTexture(texture_file);
+    texture = TextureManager::LoadTexture("img/enemy/health_bar.png");
+    texture_background = TextureManager::LoadTexture("img/enemy/health_bar_background.png");
 }
-void EnemyHealthBar::SetDestSize(int _w, int _h)
-{
-    dest_rect.w = _w;
-    dest_rect.h = _h;
-}
+
 void EnemyHealthBar::Reset(int health)
 {
-    appear_duration = 70;
-    src_rect.y = (8 - ((health + health_each - 1) / health_each)) * src_rect.h;
+    appear_duration = 80;
+    double per = health / (double) full_health;
+    dest_rect.w = static_cast<int> (per * base_dest_width);
+    src_rect.w = static_cast<int> (per * base_src_width);
 }
 
 void EnemyHealthBar::Update(int deltax, int deltay)
@@ -41,6 +43,7 @@ void EnemyHealthBar::Update(int deltax, int deltay)
 }
 void EnemyHealthBar::Draw()
 {
+    TextureManager::Draw(texture_background, dest_rect_bgr);
     TextureManager::Draw(texture, src_rect, dest_rect);
 }
 void EnemyHealthBar::Draw(int deltax, int deltay)
@@ -50,6 +53,8 @@ void EnemyHealthBar::Draw(int deltax, int deltay)
         appear_duration--;
         dest_rect.x += deltax;
         dest_rect.y += deltay;
-        TextureManager::Draw(texture, src_rect, dest_rect);
+        dest_rect_bgr.x = dest_rect.x - 2;
+        dest_rect_bgr.y = dest_rect.y - 2;
+        Draw();
     }  
 }

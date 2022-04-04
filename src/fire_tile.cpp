@@ -16,15 +16,15 @@ FireTile::~FireTile() {}
 
 void FireTile::AddAnimations()
 {
-    Animation burn(0, 30, 27, 8, 150);
+    Animation burn(0, 30, 27, 8, 100);
     sprite->animations_map["burn"] = burn;
 }
 void FireTile::Reset(int _damage, int _duration)
 {
     damage = _damage;
     duration = _duration;
-    transform->x = (rand() % 600) - 400 + boss->start_x;
-    transform->y = (rand() % 600) - 400 + boss->start_y;
+    transform->x = (rand() % 700) - 400 + boss->start_x;
+    transform->y = (rand() % 700) - 400 + boss->start_y;
 }
 void FireTile::Update()
 {

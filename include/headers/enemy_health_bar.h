@@ -5,18 +5,17 @@
 class EnemyHealthBar
 {
 private:
-    SDL_Texture *texture;
+    SDL_Texture *texture, *texture_background;
     TransformComponent *transform;
     int appear_duration;
-    int num_partitions;
-    int health_each;
+    int base_src_width, base_dest_width;
+    int full_health;
 public:
-    SDL_Rect src_rect, dest_rect;
+    SDL_Rect src_rect, dest_rect, dest_rect_bgr;
     
-    EnemyHealthBar(TransformComponent *_transform, int _full_health);
+    EnemyHealthBar(TransformComponent *_transform, int _w, int _h, int _full_health);
     ~EnemyHealthBar();
-    void SetTexture(const char *texture_file);
-    void SetDestSize(int _w, int _h);
+    void SetTexture();
     void Reset(int health);
     void Update(int deltax, int deltay);
     void Draw();

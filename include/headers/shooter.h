@@ -6,7 +6,7 @@ class Shooter
 public:
     Shooter();
     ~Shooter();
-    void AddNewBullet(int x, int y);
+    void AddNewBullet(int x, int y, bool advanced);
     void Update();
     void Render();
     std::vector<Bullet*> bullet_container;

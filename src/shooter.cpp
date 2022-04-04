@@ -2,9 +2,9 @@
 
 Shooter::Shooter() {}
 Shooter::~Shooter() {}
-void Shooter::AddNewBullet(int x, int y)
+void Shooter::AddNewBullet(int x, int y, bool advanced)
 {
-    Bullet *bullet = new Bullet(x, y);
+    Bullet *bullet = new Bullet(x, y, advanced);
     bullet_container.push_back(bullet);
 }
 void Shooter::Update()

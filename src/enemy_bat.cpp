@@ -6,8 +6,8 @@ EnemyBat::EnemyBat(int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 50, 28);
     sprite = new SpriteComponent("img/enemy/enemy_bat.png", transform, true);
-    health_bar = new EnemyHealthBar(transform, 56);
-    health = 56;
+    health = 50;
+    health_bar = new EnemyHealthBar(transform, 25, 5, health);
     xp = 2;
     attack = 1;
     attack_interval = 150;
@@ -118,5 +118,5 @@ void EnemyBat::DecHealth(int v)
 
 void EnemyBat::AttackPlayer()
 {
-    shooter->AddNewBullet(transform->x + 5, transform->y + 5);
+    shooter->AddNewBullet(transform->x + 5, transform->y + 5, false);
 }

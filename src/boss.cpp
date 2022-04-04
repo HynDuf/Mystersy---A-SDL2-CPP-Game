@@ -8,13 +8,12 @@ Boss::Boss()
     start_x = (rand() % 2 ? 1 : -1) * (rand() % 109);
     start_y = (rand() % 2 ? 1 : -1) * (rand() % 177);
     cur_skill = 0;
-    skill_duration = 1000;
+    skill_duration = 500;
 
     transform = new TransformComponent(start_x, start_y, 0, 90, 90);
     sprite = new SpriteComponent("img/enemy/boss.png", transform, true);
     health = 10000;
-    health_bar = new EnemyHealthBar(transform, health);
-    health_bar->SetDestSize(80, 7);
+    health_bar = new EnemyHealthBar(transform, 80, 7, health);
     AddAnimations();
     sprite->ApplyAnimation("walk_right");
 
@@ -27,25 +26,27 @@ Boss::~Boss() {}
 
 void Boss::Update()
 {
-    if (!IsInsideActiveZone()) 
+    for (FireTile *&f : skill_fire.fire_tiles)
+        f->Update();
+
+    if (!IsInsideActiveZone() || !IsAlive()) 
         return;
     transform->Update();
     sprite->Update();
     if (--skill_duration == 0)
     {
         ExecuteSkill();
-        skill_duration = 1000;
+        skill_duration = 500;
         (cur_skill += 1) %= 4;
     }
 
-    for (FireTile *&f : skill_fire.fire_tiles)
-        f->Update();
+    
     UpdateShoot();
-    health_bar->Update(-5, -20);
+    health_bar->Update(-3, -22);
 }
 void Boss::Render()
 {
-    if (!IsInsideActiveZone()) 
+    if (!IsInsideActiveZone() || !IsAlive()) 
         return;
     sprite->Draw(-player->xdif, -player->ydif);
     health_bar->Draw(-player->xdif, -player->ydif);
@@ -59,7 +60,7 @@ bool Boss::IsInsideStartingZone(int x, int y)
 {
     int X = (x + player->xdif) - start_x;
     int Y = (y + player->ydif) - start_y;
-    return X * X + Y * Y <= 450 * 450;
+    return X * X + Y * Y <= 500 * 500;
 }
 
 bool Boss::IsInsideActiveZone()
@@ -91,7 +92,7 @@ void Boss::UpdateShoot()
     if (--skill_shoot.interval == 0)
     {
         skill_shoot.interval = 20;
-        shooter->AddNewBullet(transform->x + 40, transform->y + 40);
+        shooter->AddNewBullet(transform->x + 40, transform->y + 40, true);
     }
 }
 void Boss::ExecuteSkill()
@@ -115,8 +116,8 @@ void Boss::ExecuteSkill()
 
 void Boss::ExecuteTeleport()
 {
-    transform->x = (rand() % 400) - 200 + start_x;
-    transform->y = (rand() % 400) - 200 + start_y;
+    transform->x = (rand() % 450) - 225 + start_x;
+    transform->y = (rand() % 450) - 225 + start_y;
 }
 void Boss::ExecuteFirewall()
 {

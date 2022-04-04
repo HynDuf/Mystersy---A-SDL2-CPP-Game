@@ -1,15 +1,25 @@
 #include <bullet.h>
 #include <point_2d.h>
 #include <player_manager.h>
-Bullet::Bullet(int x, int y)
+Bullet::Bullet(int x, int y, bool advanced)
 {
+    if (advanced)
+    {
+        transform = new TransformComponent(x, y, 6, 20, 20);
+        sprite = new SpriteComponent("img/game/shooting_ball_1.png", transform, false);
 
-    transform = new TransformComponent(x, y, 3.5, 20, 20);
-    sprite = new SpriteComponent("img/game/shooting_ball_1.png", transform, false);
+        damage = 20;
+        active = true;
+        duration = 200;
+    } else 
+    {
+        transform = new TransformComponent(x, y, 3.5, 20, 20);
+        sprite = new SpriteComponent("img/game/shooting_ball.png", transform, false);
 
-    damage = 10;
-    active = true;
-    duration = 300;
+        damage = 10;
+        active = true;
+        duration = 300;
+    }
     // * Calculate vector direction
     int screenX = x - player->xdif, screenY = y - player->ydif;
     Point<double> vec(400 - screenX, 320 - screenY);

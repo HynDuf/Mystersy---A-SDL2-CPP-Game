@@ -54,7 +54,7 @@ private:
     {
         int damage = 3;
         int duration = 1000;   
-        int number = 30;
+        int number = 70;
         std::vector<FireTile*> fire_tiles;
     } skill_fire;
 
