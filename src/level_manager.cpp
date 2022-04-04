@@ -11,12 +11,12 @@ LevelManager::LevelManager()
     cur_q_cooldown = 0;
     cur_e_duration = 0;
 
-    delta_hp = 10;
+    delta_hp = 20;
     delta_xp = 5;
-    delta_attack = 0.5;
-    delta_speed = 0.1;
-    delta_q_cooldown = -3;
-    delta_e_duration = 3;
+    delta_attack = 0.7;
+    delta_speed = 0.15;
+    delta_q_cooldown = -6;
+    delta_e_duration = 6;
 }
 LevelManager::~LevelManager() {}
 

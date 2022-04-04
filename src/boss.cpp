@@ -12,10 +12,14 @@ Boss::Boss()
 
     transform = new TransformComponent(start_x, start_y, 0, 90, 90);
     sprite = new SpriteComponent("img/enemy/boss.png", transform, true);
-    health = 10000;
+    health = 2000;
     health_bar = new EnemyHealthBar(transform, 80, 7, health);
     AddAnimations();
     sprite->ApplyAnimation("walk_right");
+
+    rage_mode = false;
+    rage_mode_cooldown = 0;
+    rage_mode_duration = 0;
 
     skill_fire.fire_tiles.assign(skill_fire.number, NULL);
     for (int i = 0; i < skill_fire.number; i++)
@@ -33,13 +37,19 @@ void Boss::Update()
         return;
     transform->Update();
     sprite->Update();
-    if (--skill_duration == 0)
+    if (rage_mode == true)
     {
-        ExecuteSkill();
-        skill_duration = 500;
-        (cur_skill += 1) %= 4;
+        ExecuteRageMode();
+    } 
+    if (rage_mode_duration == 0)
+    {
+        if (--skill_duration == 0)
+        {
+            ExecuteSkill();
+            skill_duration = 500;
+            (cur_skill += 1) %= 4;
+        }
     }
-
     
     UpdateShoot();
     health_bar->Update(-3, -22);
@@ -82,6 +92,8 @@ void Boss::DecHealth(int v)
 {
     health -= v;
     health_bar->Reset(health);
+    if (health < 1000)
+        rage_mode = true;
 }
 
 void Boss::UpdateShoot()
@@ -132,13 +144,30 @@ void Boss::ExecuteSpawnMonster()
 {
     for (int i = 0; i < skill_spawn.number; i++)
     {
-        if (enemy_generator->bat_container.size() < 50) 
+        if (enemy_generator->bat_container.size() < 40) 
             enemy_generator->AddNewBat(transform->x + 40, transform->y + 40);
-        if (enemy_generator->skeleton_container.size() < 50) 
+        if (enemy_generator->skeleton_container.size() < 40) 
             enemy_generator->AddNewSkeleton(transform->x + 40, transform->y + 40);
     }
 }
-
+void Boss::ExecuteRageMode()
+{
+    if (rage_mode_cooldown == 0)
+    {
+        rage_mode_cooldown = 2000;
+        rage_mode_duration = 500;
+        ExecuteFirewall();
+        ExecuteShootFireBall();
+    } else rage_mode_cooldown--;
+    if (rage_mode_duration > 0)
+    {
+        rage_mode_duration--;
+        if (rage_mode_duration % 50 == 0) 
+            ExecuteTeleport();
+        if (rage_mode_duration % 300 == 0) 
+            ExecuteSpawnMonster();
+    }
+}
 bool Boss::IsAlive()
 {
     return health > 0;

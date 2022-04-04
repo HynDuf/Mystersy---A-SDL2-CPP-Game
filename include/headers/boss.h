@@ -27,6 +27,7 @@ private:
     void ExecuteFirewall();
     void ExecuteShootFireBall();
     void ExecuteSpawnMonster();
+    void ExecuteRageMode();
     void UpdateShoot();
     // Skill types
     static const int TELEPORT = 0;
@@ -70,6 +71,10 @@ private:
     } skill_spawn;
 
     SpriteComponent *sprite;
+
+    bool rage_mode;
+    int rage_mode_cooldown;
+    int rage_mode_duration;
 };  
 
 extern Boss *boss;
