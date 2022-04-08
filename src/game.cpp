@@ -50,7 +50,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
         return;
     }
     window = SDL_CreateWindow(title, xpos, ypos, width, height, screen_mode);
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     is_running = true;
     player = new PlayerManager("img/player/player.png", 365, 300);
@@ -110,7 +110,7 @@ void Game::Render()
     arrow_direction->Render();
     boss_guider->Render();
 
-    if (is_running == false)
+    if (Lost())
         RenderGameOver();
     if (Won())
         RenderGameWon();
@@ -126,6 +126,13 @@ void Game::RenderGameOver()
     dest_rect_tmp.w = 400;
     dest_rect_tmp.h = 240;
     TextureManager::Draw(texture, dest_rect_tmp);
+
+    texture = TextureManager::LoadTexture("img/game/play_again_quit.png");
+    dest_rect_tmp.x = 250;
+    dest_rect_tmp.y = 455;
+    dest_rect_tmp.w = 400;
+    dest_rect_tmp.h = 25;
+    TextureManager::Draw(texture, dest_rect_tmp);
 }
 void Game::RenderGameWon()
 {
@@ -136,10 +143,21 @@ void Game::RenderGameWon()
     dest_rect_tmp.w = 600;
     dest_rect_tmp.h = 340;
     TextureManager::Draw(texture, dest_rect_tmp);
+
+    texture = TextureManager::LoadTexture("img/game/play_again_quit.png");
+    dest_rect_tmp.x = 250;
+    dest_rect_tmp.y = 535;
+    dest_rect_tmp.w = 400;
+    dest_rect_tmp.h = 25;
+    TextureManager::Draw(texture, dest_rect_tmp);
 }
 bool Game::Won()
 {
     return !boss->IsAlive();
+}
+bool Game::Lost()
+{
+    return is_running == false;
 }
 void Game::Clean()
 {

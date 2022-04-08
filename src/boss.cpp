@@ -8,11 +8,11 @@ Boss::Boss()
     start_x = (rand() % 2 ? 1 : -1) * (rand() % 20009);
     start_y = (rand() % 2 ? 1 : -1) * (rand() % 20077);
     cur_skill = 0;
-    skill_duration = 500;
+    skill_duration = 200;
 
     transform = new TransformComponent(start_x, start_y, 0, 90, 90);
     sprite = new SpriteComponent("img/enemy/boss.png", transform, true);
-    health = 2000;
+    health = 10000;
     health_bar = new EnemyHealthBar(transform, 80, 7, health);
     AddAnimations();
     sprite->ApplyAnimation("walk_right");
@@ -144,9 +144,9 @@ void Boss::ExecuteSpawnMonster()
 {
     for (int i = 0; i < skill_spawn.number; i++)
     {
-        if (enemy_generator->bat_container.size() < 40) 
+        if (enemy_generator->bat_container.size() < 35) 
             enemy_generator->AddNewBat(transform->x + 40, transform->y + 40);
-        if (enemy_generator->skeleton_container.size() < 40) 
+        if (enemy_generator->skeleton_container.size() < 35) 
             enemy_generator->AddNewSkeleton(transform->x + 40, transform->y + 40);
     }
 }
@@ -154,7 +154,7 @@ void Boss::ExecuteRageMode()
 {
     if (rage_mode_cooldown == 0)
     {
-        rage_mode_cooldown = 2000;
+        rage_mode_cooldown = 1000;
         rage_mode_duration = 500;
         ExecuteFirewall();
         ExecuteShootFireBall();

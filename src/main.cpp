@@ -9,32 +9,67 @@ Uint32 frame_start;
 int frame_time;
 int main(int argc, char *argv[])
 {
-    game = new Game();
-    game->Init("Mystersy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, false);
-    while (game->Running())
+    while (1)
     {
-        frame_start = SDL_GetTicks();
-        game->HandleEvents();
-        game->Update(); 
-        game->Render();
-        if (game->Running() == false)
+        game = new Game();
+        game->Init("Mystersy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, false);
+        while (game->Running())
         {
-            std::cout << "Game Over!\n";
-            SDL_Delay(2000);
+            frame_start = SDL_GetTicks();
+            game->HandleEvents();
+            game->Update(); 
+            game->Render();
+            if (game->Lost())
+            {
+                std::cout << "Game Over!\n";
+                break;
+            }
+            if (game->Won())
+            {
+                std::cout << "Game Won\n";
+                break;
+            }
+            frame_time = SDL_GetTicks() - frame_start;
+            if (frame_time < FRAME_MAX_DELAY)
+            {
+                SDL_Delay(FRAME_MAX_DELAY - frame_time);
+            }
+        }
+        SDL_Event event;
+        bool play_again = false;
+        while (1)
+        {
+            bool done = false;
+            while (SDL_PollEvent(&event))
+            {
+                switch (event.type)
+                {
+                    case SDL_KEYDOWN:
+                        switch (event.key.keysym.sym)
+                        {
+                            case SDLK_ESCAPE:
+                                play_again = false;
+                                done = true;
+                                break;
+                            case SDLK_SPACE:
+                                play_again = true;
+                                done = true;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (done)
+                break;
+        }
+        game->Clean();
+        if (!play_again)
             break;
-        }
-        if (game->Won() == true)
-        {
-            std::cout << "Game Won\n";
-            SDL_Delay(3000);
-            break;
-        }
-        frame_time = SDL_GetTicks() - frame_start;
-        if (frame_time < FRAME_MAX_DELAY)
-        {
-            SDL_Delay(FRAME_MAX_DELAY - frame_time);
-        }
     }
-    game->Clean();
+    
     return 0;
 }
