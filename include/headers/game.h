@@ -20,8 +20,24 @@ public:
     bool Running() {return is_running;}
     bool Won();
     bool Lost();
+
+    /**
+     * @brief Menu's mouse manager
+     */
+    int play_button_state = 0;
+    int help_button_state = 0;
+    int exit_button_state = 0;
+    bool InsidePlayButton(int x, int y);
+    bool InsideHelpButton(int x, int y);
+    bool InsideExitButton(int x, int y);
+    int UpdateMouse();
+    void RenderMenu();
+
+
+    void RenderGuide();
+
+
     static SDL_Renderer *renderer;
-    static SDL_Event event;
     static const Uint8 *keyboard_state;
     
 private:

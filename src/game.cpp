@@ -122,16 +122,16 @@ void Game::RenderGameOver()
     SDL_Texture *texture = TextureManager::LoadTexture("img/game/gameover.png");
     SDL_Rect dest_rect_tmp;
     dest_rect_tmp.x = 200;
-    dest_rect_tmp.y = 200;
+    dest_rect_tmp.y = 170;
     dest_rect_tmp.w = 400;
     dest_rect_tmp.h = 240;
     TextureManager::Draw(texture, dest_rect_tmp);
 
     texture = TextureManager::LoadTexture("img/game/play_again_quit.png");
-    dest_rect_tmp.x = 250;
-    dest_rect_tmp.y = 455;
-    dest_rect_tmp.w = 400;
-    dest_rect_tmp.h = 25;
+    dest_rect_tmp.x = 157;
+    dest_rect_tmp.y = 420;
+    dest_rect_tmp.w = 490;
+    dest_rect_tmp.h = 35;
     TextureManager::Draw(texture, dest_rect_tmp);
 }
 void Game::RenderGameWon()
@@ -139,18 +139,119 @@ void Game::RenderGameWon()
     SDL_Texture *texture = TextureManager::LoadTexture("img/game/gamewon.png");
     SDL_Rect dest_rect_tmp;
     dest_rect_tmp.x = 100;
-    dest_rect_tmp.y = 150;
+    dest_rect_tmp.y = 100;
     dest_rect_tmp.w = 600;
     dest_rect_tmp.h = 340;
     TextureManager::Draw(texture, dest_rect_tmp);
 
     texture = TextureManager::LoadTexture("img/game/play_again_quit.png");
-    dest_rect_tmp.x = 250;
-    dest_rect_tmp.y = 535;
-    dest_rect_tmp.w = 400;
-    dest_rect_tmp.h = 25;
+    dest_rect_tmp.x = 170;
+    dest_rect_tmp.y = 355;
+    dest_rect_tmp.w = 490;
+    dest_rect_tmp.h = 35;
     TextureManager::Draw(texture, dest_rect_tmp);
 }
+
+bool Game::InsidePlayButton(int x, int y)
+{
+    return 320 <= x && x <= 480
+        && 250 <= y && y <= 350;
+}
+bool Game::InsideHelpButton(int x, int y)
+{
+    return 320 <= x && x <= 480
+        && 365 <= y && y <= 465;
+}
+bool Game::InsideExitButton(int x, int y)
+{
+    return 320 <= x && x <= 480
+        && 480 <= y && y <= 580;
+}
+
+int Game::UpdateMouse() 
+{
+    int mousex, mousey;
+
+    SDL_PumpEvents();
+
+    Uint32 buttons = SDL_GetMouseState(&mousex, &mousey);
+
+    bool changed = false;
+    int play = InsidePlayButton(mousex, mousey);
+    int help = InsideHelpButton(mousex, mousey);
+    int exit = InsideExitButton(mousex, mousey);
+
+    if (play != play_button_state || help != help_button_state || exit != exit_button_state)
+        changed = true;
+    play_button_state = play;
+    help_button_state = help;
+    exit_button_state = exit;
+
+    if (help && (buttons & SDL_BUTTON_LMASK) != 0)
+        return 1;
+    if (exit && (buttons & SDL_BUTTON_LMASK) != 0)
+        return 2;
+    if (play && (buttons & SDL_BUTTON_LMASK) != 0)
+        return 3;
+
+    if (!changed) 
+        return -1;
+    return 0;
+}
+
+void Game::RenderMenu()
+{
+    SDL_RenderClear(renderer);
+    map->RenderMap();
+    SDL_Texture *title = TextureManager::LoadTexture("img/game/game_title.png");
+    SDL_Rect dest, src;
+    dest.x = 80;
+    dest.y = 50;
+    dest.w = 640;
+    dest.h = 150;
+    TextureManager::Draw(title, dest);
+
+    title = TextureManager::LoadTexture("img/game/play_button.png");
+    src.x = play_button_state * 150;
+    src.y = 0;
+    src.w = 150;
+    src.h = 98;
+    dest.x = 320;
+    dest.y = 250;
+    dest.w = 160;
+    dest.h = 100;
+    TextureManager::Draw(title, src, dest);
+
+    title = TextureManager::LoadTexture("img/game/help_button.png");
+    src.x = help_button_state * 150;
+    src.y = 0;
+    src.w = 150;
+    src.h = 98;
+    dest.x = 320;
+    dest.y = 365;
+    dest.w = 160;
+    dest.h = 100;
+    TextureManager::Draw(title, src, dest);
+
+    title = TextureManager::LoadTexture("img/game/exit_button.png");
+    src.x = exit_button_state * 150;
+    src.y = 0;
+    src.w = 150;
+    src.h = 98;
+    dest.x = 320;
+    dest.y = 480;
+    dest.w = 160;
+    dest.h = 100;
+    TextureManager::Draw(title, src, dest);
+
+    SDL_RenderPresent(renderer);
+}
+
+void Game::RenderGuide()
+{
+    
+}
+
 bool Game::Won()
 {
     return !boss->IsAlive();
