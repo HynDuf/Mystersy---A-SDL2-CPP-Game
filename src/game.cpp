@@ -249,7 +249,23 @@ void Game::RenderMenu()
 
 void Game::RenderGuide()
 {
-    
+    SDL_RenderClear(renderer);
+    map->RenderMapFullGrass();
+    SDL_Texture *title = TextureManager::LoadTexture("img/game/guide.png");
+    SDL_Rect dest;
+    dest.x = 80;
+    dest.y = 110;
+    dest.w = 660;
+    dest.h = 680;
+    TextureManager::Draw(title, dest);
+
+    title = TextureManager::LoadTexture("img/game/instructions.png");
+    dest.x = 300;
+    dest.y = 35;
+    dest.w = 500;
+    dest.h = 550;
+    TextureManager::Draw(title, dest);
+    SDL_RenderPresent(renderer);
 }
 
 bool Game::Won()

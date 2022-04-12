@@ -81,6 +81,20 @@ int Menu()
 }
 int Help()
 {
+    game->Init("Mystersy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, false);
+    game->RenderGuide();
+
+    while (1)
+    {
+        int mousex, mousey;
+
+        SDL_PumpEvents();
+
+        Uint32 buttons = SDL_GetMouseState(&mousex, &mousey);
+        if ((buttons & SDL_BUTTON_LMASK) != 0)
+            break;
+    }
+    
     return MENU;
 }
 int Exit()

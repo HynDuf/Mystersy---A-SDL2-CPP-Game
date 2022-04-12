@@ -197,7 +197,17 @@ void WorldMap::UpdateMap()
     if (Game::keyboard_state[SDL_SCANCODE_M])
         boss_guider->active = true;
 }
-
+void WorldMap::RenderMapFullGrass()
+{
+    tmp_dest.h = tmp_dest.w = 32;
+    for (int x = 0; x < 800; x += 32)
+        for (int y = 0; y < 640; y += 32)
+    {
+        tmp_dest.x = x;
+        tmp_dest.y = y;
+        TextureManager::Draw(tile_type[2], tmp_src, tmp_dest);
+    }
+}
 void WorldMap::RenderMap()
 {
     int x_left = -((player->xdif % 32 + 32) % 32);

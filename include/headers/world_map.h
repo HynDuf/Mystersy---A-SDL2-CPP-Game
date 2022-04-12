@@ -15,6 +15,7 @@ public:
     int GetTileType(int x, int y);
     void UpdateMap();
     void RenderMap();
+    void RenderMapFullGrass();
 
     /**
      * @brief When generating map the FIRST TIME, 
