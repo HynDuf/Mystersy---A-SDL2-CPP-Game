@@ -11,6 +11,7 @@
 #include <level_manager.h>
 #include <boss.h>
 #include <boss_guider.h>
+#include <sound_manager.h>
 
 EnemySkeleton *enemy;
 SDL_Renderer *Game::renderer = nullptr;
@@ -27,6 +28,7 @@ LevelManager *level_manager;
 Shooter *shooter;
 Boss *boss;
 BossGuider *boss_guider;
+SoundManager *sound_manager;
 void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
     int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
@@ -49,6 +51,12 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
         is_running = false;
         return;
     }
+
+    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    {
+        printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        return;    
+    }
     window = SDL_CreateWindow(title, xpos, ypos, width, height, screen_mode);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -63,6 +71,8 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     level_manager = new LevelManager();
     boss = new Boss();
     boss_guider = new BossGuider();
+    sound_manager = new SoundManager();
+    sound_manager->PlayBGM();
 }
 void Game::HandleEvents()
 {
@@ -283,6 +293,7 @@ void Game::Clean()
     SDL_Quit();
     IMG_Quit();
     TTF_Quit();
+    Mix_CloseAudio();
     std::cout << "Game cleaned" << std::endl;
 }
 
