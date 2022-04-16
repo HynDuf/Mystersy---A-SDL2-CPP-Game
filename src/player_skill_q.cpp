@@ -3,6 +3,7 @@
 #include <enemy_generator.h>
 #include <point_2d.h>
 #include <boss.h>
+#include <sound_manager.h>
 PlayerSkillQ::PlayerSkillQ()
 {
     cooldown = 0;
@@ -20,7 +21,11 @@ PlayerSkillQ::PlayerSkillQ()
 
 }
 
-PlayerSkillQ::~PlayerSkillQ() {}
+PlayerSkillQ::~PlayerSkillQ() 
+{
+    delete transform;
+    delete sprite;
+}
 
 void PlayerSkillQ::Update()
 {
@@ -58,6 +63,7 @@ void PlayerSkillQ::ExecuteSkill(int dx, int dy)
     }
     if (cooldown > 0)
         return;
+    sound_manager->PlayQ();
     duration = duration_base;
     cooldown = cooldown_base;
     transform->vx = dx;

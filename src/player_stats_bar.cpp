@@ -28,6 +28,10 @@ PlayerStatsBar::~PlayerStatsBar()
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(HP);
     SDL_DestroyTexture(XP);
+    delete transform_heart;
+    delete transform_xp;
+    delete sprite_heart;
+    delete sprite_xp;
 }
 std::string PlayerStatsBar::IntToString(int x)
 {

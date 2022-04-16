@@ -2,6 +2,7 @@
 #include <player_manager.h>
 #include <world_map.h>
 #include <shooter.h>
+#include <sound_manager.h>
 EnemyBat::EnemyBat(int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 50, 28);
@@ -18,9 +19,14 @@ EnemyBat::EnemyBat(int x, int y)
     AddAnimations();
     sprite->ApplyAnimation("walk_right");
     direction = 1;
-    
+    sound_manager->PlayMonsterAppear();
 }
-EnemyBat::~EnemyBat() {}
+EnemyBat::~EnemyBat() 
+{
+    delete transform;
+    delete sprite;
+    delete health_bar;
+}
 
 void EnemyBat::AddAnimations()
 {

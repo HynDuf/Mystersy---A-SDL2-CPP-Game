@@ -54,8 +54,8 @@ private:
     struct 
     {
         int damage = 3;
-        int duration = 800;   
-        int number = 50;
+        int duration = 700;   
+        int number = 40;
         std::vector<FireTile*> fire_tiles;
     } skill_fire;
 

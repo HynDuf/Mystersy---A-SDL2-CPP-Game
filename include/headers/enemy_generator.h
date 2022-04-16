@@ -15,7 +15,7 @@ public:
     std::vector<EnemyBat*> bat_container;
 
 private:
-    const int MAX_ENEMY = 20;
+    const int MAX_ENEMY = 15;
     int generator_interval;
     const char *texture;
 

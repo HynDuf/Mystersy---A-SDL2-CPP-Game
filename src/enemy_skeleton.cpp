@@ -1,7 +1,7 @@
 #include <enemy_skeleton.h>
 #include <player_manager.h>
 #include <world_map.h>
-
+#include <sound_manager.h>
 EnemySkeleton::EnemySkeleton(int x, int y)
 {
     transform = new TransformComponent(x, y, 1, 70, 40);
@@ -17,9 +17,14 @@ EnemySkeleton::EnemySkeleton(int x, int y)
     AddAnimations();
     sprite->ApplyAnimation("idle_right");
     direction = 1;
-    
+    sound_manager->PlayMonsterAppear();
 }
-EnemySkeleton::~EnemySkeleton() {}
+EnemySkeleton::~EnemySkeleton() 
+{
+    delete transform;
+    delete sprite;
+    delete health_bar;
+}
 
 void EnemySkeleton::AddAnimations()
 {

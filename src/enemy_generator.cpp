@@ -73,7 +73,8 @@ void EnemyGenerator::Update()
         {
             e->Update();
             tmp.push_back(e);
-        }
+        } else 
+            delete e;
     }
     skeleton_container = std::move(tmp);
     std::vector<EnemyBat*> tmp1;
@@ -83,7 +84,8 @@ void EnemyGenerator::Update()
         {
             e->Update();
             tmp1.push_back(e);
-        }
+        } else 
+            delete e;
     }
     bat_container = std::move(tmp1);
 }

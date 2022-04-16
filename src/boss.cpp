@@ -3,10 +3,11 @@
 #include <player_manager.h>
 #include <shooter.h>
 #include <enemy_generator.h>
+#include <sound_manager.h>
 Boss::Boss()
 {
-    start_x = (rand() % 2 ? 1 : -1) * (rand() % 20009);
-    start_y = (rand() % 2 ? 1 : -1) * (rand() % 20077);
+    start_x = (rand() % 2 ? 1 : -1) * (rand() % 5009);
+    start_y = (rand() % 2 ? 1 : -1) * (rand() % 5077);
     cur_skill = 0;
     skill_duration = 200;
 
@@ -26,7 +27,14 @@ Boss::Boss()
         skill_fire.fire_tiles[i] = new FireTile(skill_fire.damage, 0);
 }
 
-Boss::~Boss() {}
+Boss::~Boss() 
+{
+    for (FireTile *&f : skill_fire.fire_tiles)
+        delete f;
+    delete sprite;
+    delete transform;
+    delete health_bar;
+}
 
 void Boss::Update()
 {
@@ -57,7 +65,13 @@ void Boss::Update()
 void Boss::Render()
 {
     if (!IsInsideActiveZone() || !IsAlive()) 
+    {
+        if (sound_manager->IsPlayingBossBGM() == true)
+        sound_manager->PlayBGM();
         return;
+    }
+    if (sound_manager->IsPlayingBossBGM() == false)
+        sound_manager->PlayBossBGM();
     sprite->Draw(-player->xdif, -player->ydif);
     health_bar->Draw(-player->xdif, -player->ydif);
 }
@@ -138,15 +152,15 @@ void Boss::ExecuteFirewall()
 }
 void Boss::ExecuteShootFireBall()
 {
-    skill_shoot.duration = 800;
+    skill_shoot.duration = 500;
 }
 void Boss::ExecuteSpawnMonster()
 {
     for (int i = 0; i < skill_spawn.number; i++)
     {
-        if (enemy_generator->bat_container.size() < 35) 
+        if (enemy_generator->bat_container.size() < 25) 
             enemy_generator->AddNewBat(transform->x + 40, transform->y + 40);
-        if (enemy_generator->skeleton_container.size() < 35) 
+        if (enemy_generator->skeleton_container.size() < 25) 
             enemy_generator->AddNewSkeleton(transform->x + 40, transform->y + 40);
     }
 }

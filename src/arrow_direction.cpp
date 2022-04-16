@@ -8,7 +8,11 @@ ArrowDirection::ArrowDirection()
     sprite = new SpriteComponent("img/game/arrow.png", transform, false);
 }
 
-ArrowDirection::~ArrowDirection() {}
+ArrowDirection::~ArrowDirection() 
+{
+    delete transform;
+    delete sprite;
+}
 void ArrowDirection::ResetDirection(int ddx, int ddy)
 {
     dx = ddx;

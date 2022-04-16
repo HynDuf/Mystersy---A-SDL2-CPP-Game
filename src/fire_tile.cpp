@@ -12,7 +12,11 @@ FireTile::FireTile(int _damage, int _duration)
     sprite->ApplyAnimation("burn");
 }
 
-FireTile::~FireTile() {}
+FireTile::~FireTile() 
+{
+    delete transform;
+    delete sprite;
+}
 
 void FireTile::AddAnimations()
 {

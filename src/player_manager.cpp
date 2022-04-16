@@ -1,6 +1,7 @@
 #include <player_manager.h>
 #include <texture_manager.h>
 #include <player_skill_e.h>
+#include <sound_manager.h>
 PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
 {
     xdif = ydif = 0;
@@ -17,7 +18,12 @@ PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
     AddAnimations();
     sprite->ApplyAnimation("idle_right");
 }
-PlayerManager::~PlayerManager() {}
+PlayerManager::~PlayerManager() 
+{
+    delete transform;
+    delete sprite;
+    delete stats_bar;
+}
 void PlayerManager::Update()
 {
     health = std::max(health, 0);
@@ -76,7 +82,10 @@ bool PlayerManager::IsAlive()
 void PlayerManager::DecHealth(int damage)
 {
     if (player_skill_e->duration == 0)
+    {
         player->health -= damage;
+        sound_manager->PlayPlayerDamaged();
+    }
 }
 
 bool PlayerManager::IsInsideStartingZone(int x, int y)

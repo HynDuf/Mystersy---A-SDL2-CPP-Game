@@ -14,8 +14,15 @@ public:
     void PlayPlayerDamaged();
     void PlayBossBGM();
     void PlayBGM();
-
+    bool IsPlayingBossBGM();
+    void Update();
 private:
+    bool is_playing_boss_bgm;
+    
+    int duration_bgm = 60 * 200;
+
+    int duration_boss_bgm = 60 * 315;
+
     Mix_Music *bgm = NULL;
     Mix_Music *boss_bgm = NULL;
 
@@ -27,6 +34,8 @@ private:
     Mix_Chunk *shoot = NULL;
     Mix_Chunk *slash = NULL;
     Mix_Chunk *player_damaged = NULL;
+
+
 };
 
 extern SoundManager *sound_manager;

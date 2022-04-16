@@ -2,6 +2,7 @@
 #include <player_manager.h>
 #include <player_skill_q.h>
 #include <player_skill_e.h>
+#include <sound_manager.h>
 LevelManager::LevelManager()
 {
     cur_hp = 0;
@@ -56,4 +57,5 @@ void LevelManager::LevelUp()
     player_skill_e->duration_base += static_cast<int> (cur_e_duration);
     cur_e_duration -= static_cast<int> (cur_e_duration);
 
-}
+    sound_manager->PlayLevelUp();
+}   

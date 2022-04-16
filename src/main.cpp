@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
                 break;
         }
         game->Clean();
+        delete game;
     }
     
     return 0;
@@ -61,6 +62,7 @@ int Menu()
     game->RenderMenu();
     while (1)
     {
+        frame_start = SDL_GetTicks();
         int state = game->UpdateMouse();
         switch (state)
         {
@@ -76,6 +78,12 @@ int Menu()
             default:
                 break;
         }
+        game->UpdateSound();
+        frame_time = SDL_GetTicks() - frame_start;
+        if (frame_time < FRAME_MAX_DELAY)
+        {
+            SDL_Delay(FRAME_MAX_DELAY - frame_time);
+        }
     }
     return -1;
 }
@@ -86,6 +94,7 @@ int Help()
 
     while (1)
     {
+        frame_start = SDL_GetTicks();
         int mousex, mousey;
 
         SDL_PumpEvents();
@@ -93,6 +102,12 @@ int Help()
         Uint32 buttons = SDL_GetMouseState(&mousex, &mousey);
         if ((buttons & SDL_BUTTON_LMASK) != 0)
             break;
+        game->UpdateSound();
+        frame_time = SDL_GetTicks() - frame_start;
+        if (frame_time < FRAME_MAX_DELAY)
+        {
+            SDL_Delay(FRAME_MAX_DELAY - frame_time);
+        }
     }
     
     return MENU;
@@ -109,6 +124,7 @@ int PlayGame()
         frame_start = SDL_GetTicks();
         game->HandleEvents();
         game->Update(); 
+        game->UpdateSound();
         game->Render();
         if (game->Lost())
         {
@@ -130,6 +146,7 @@ int PlayGame()
     bool play_again = false;
     while (1)
     {
+        frame_start = SDL_GetTicks();
         bool done = false;
         while (SDL_PollEvent(&event))
         {
@@ -156,6 +173,12 @@ int PlayGame()
         }
         if (done)
             break;
+        game->UpdateSound();
+        frame_time = SDL_GetTicks() - frame_start;
+        if (frame_time < FRAME_MAX_DELAY)
+        {
+            SDL_Delay(FRAME_MAX_DELAY - frame_time);
+        }
     }
     if (play_again) 
         return MENU;

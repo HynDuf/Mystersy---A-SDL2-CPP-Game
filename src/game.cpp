@@ -34,27 +34,27 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
-        std::cout << "SDL Failed Initializing..." << std::endl;
+        printf("SDL Failed Initializing...");
         is_running = false;
         return;
     }
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
     {
-        printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
         is_running = false;
         return;
     }
 
     if (TTF_Init() == -1)
     {
-        printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+        printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
         is_running = false;
         return;
     }
 
-    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
     {
-        printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
         return;    
     }
     window = SDL_CreateWindow(title, xpos, ypos, width, height, screen_mode);
@@ -286,6 +286,10 @@ bool Game::Lost()
 {
     return is_running == false;
 }
+void Game::UpdateSound()
+{
+    sound_manager->Update();
+}
 void Game::Clean()
 {
     SDL_DestroyWindow(window);
@@ -294,6 +298,18 @@ void Game::Clean()
     IMG_Quit();
     TTF_Quit();
     Mix_CloseAudio();
+    Mix_Quit();
+    delete map;
+    delete player;
+    delete player_skill_q;
+    delete player_skill_e;
+    delete arrow_direction;
+    delete enemy_generator;
+    delete level_manager;
+    delete shooter;
+    delete boss;
+    delete boss_guider;
+    delete sound_manager;
     std::cout << "Game cleaned" << std::endl;
 }
 

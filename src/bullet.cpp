@@ -10,7 +10,7 @@ Bullet::Bullet(int x, int y, bool advanced)
 
         damage = 20;
         active = true;
-        duration = 150;
+        duration = 100;
     } else 
     {
         transform = new TransformComponent(x, y, 3.5, 20, 20);
@@ -18,7 +18,7 @@ Bullet::Bullet(int x, int y, bool advanced)
 
         damage = 10;
         active = true;
-        duration = 200;
+        duration = 150;
     }
     // * Calculate vector direction
     int screenX = x - player->xdif, screenY = y - player->ydif;
@@ -29,7 +29,11 @@ Bullet::Bullet(int x, int y, bool advanced)
 
     transform->SetDir(vec.x, vec.y);
 }
-Bullet::~Bullet() {}
+Bullet::~Bullet() 
+{
+    delete transform;
+    delete sprite;
+}
 void Bullet::Update()
 {
     if (active == false)

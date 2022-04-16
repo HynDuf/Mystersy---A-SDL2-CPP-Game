@@ -6,6 +6,7 @@
 #include <arrow_direction.h>
 #include <boss.h>
 #include <boss_guider.h>
+#include <sound_manager.h>
 WorldMap::WorldMap()
 {
     perlin_noise = new PerlinNoise();
@@ -21,6 +22,7 @@ WorldMap::WorldMap()
 
 WorldMap::~WorldMap()
 {
+    delete perlin_noise;
     for (int i = 0; i < 6; i++) SDL_DestroyTexture(tile_type[i]);
 }
 
@@ -79,7 +81,7 @@ void WorldMap::UpdateMap()
                 boss->DecHealth(player->attack);
             }
         }
-    
+        sound_manager->PlaySlash();
         return;
     }
     if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])

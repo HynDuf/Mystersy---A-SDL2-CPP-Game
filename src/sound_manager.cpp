@@ -1,8 +1,10 @@
 #include <sound_manager.h>
-
+#include <iostream>
 SoundManager::SoundManager()
 {
+    is_playing_boss_bgm = false;
     bgm = Mix_LoadMUS("sfx-bgm/bgm.wav");
+    // bgm = Mix_LoadMUS("sfx-bgm/player_damaged.wav");
     boss_bgm = Mix_LoadMUS("sfx-bgm/boss_bgm.wav");
 
     level_up = Mix_LoadWAV("sfx-bgm/level_up.wav");
@@ -15,6 +17,7 @@ SoundManager::SoundManager()
 }
 SoundManager::~SoundManager()
 {
+    Mix_HaltMusic();
     Mix_FreeMusic(bgm);
     Mix_FreeMusic(boss_bgm);
 
@@ -56,10 +59,32 @@ void SoundManager::PlayPlayerDamaged()
 }
 void SoundManager::PlayBossBGM()
 {
-    
-    Mix_PlayMusic(boss_bgm, 100);
+    is_playing_boss_bgm = true;
+    duration_boss_bgm = 60 * 315;
+    Mix_HaltMusic();
+    Mix_PlayMusic(boss_bgm, -1);
 }
 void SoundManager::PlayBGM()
 {
-    Mix_PlayMusic(bgm, 100);
+    is_playing_boss_bgm = false;
+    duration_bgm = 60 * 200;
+    Mix_HaltMusic();
+    Mix_PlayMusic(bgm, -1);
+}
+bool SoundManager::IsPlayingBossBGM()
+{
+    return is_playing_boss_bgm;
+}
+
+void SoundManager::Update()
+{
+    if (is_playing_boss_bgm)
+    {
+        if (--duration_boss_bgm == 0)
+            PlayBossBGM();
+    } else 
+    {
+        if (--duration_bgm == 0)
+            PlayBGM();
+    }
 }

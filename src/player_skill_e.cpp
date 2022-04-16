@@ -2,6 +2,7 @@
 #include <player_manager.h>
 #include <enemy_generator.h>
 #include <point_2d.h>
+#include <sound_manager.h>
 PlayerSkillE::PlayerSkillE()
 {
     cooldown = 0;
@@ -19,7 +20,11 @@ PlayerSkillE::PlayerSkillE()
 
 }
 
-PlayerSkillE::~PlayerSkillE() {}
+PlayerSkillE::~PlayerSkillE() 
+{
+    delete transform;
+    delete sprite;
+}
 
 void PlayerSkillE::Update()
 {
@@ -55,6 +60,7 @@ void PlayerSkillE::ExecuteSkill()
     }
     if (cooldown > 0)
         return;
+    sound_manager->PlayE();
     duration = duration_base;
     cooldown = cooldown_base;
     
