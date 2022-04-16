@@ -25,9 +25,12 @@ PlayerStatsBar::PlayerStatsBar()
 
 PlayerStatsBar::~PlayerStatsBar() 
 {
-    SDL_FreeSurface(surface);
-    SDL_DestroyTexture(HP);
-    SDL_DestroyTexture(XP);
+    if (surface)
+        SDL_FreeSurface(surface);
+    if (HP)
+        SDL_DestroyTexture(HP);
+    if (XP)
+        SDL_DestroyTexture(XP);
     delete transform_heart;
     delete transform_xp;
     delete sprite_heart;

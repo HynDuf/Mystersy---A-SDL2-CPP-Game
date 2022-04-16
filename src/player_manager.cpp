@@ -20,8 +20,8 @@ PlayerManager::PlayerManager(const char *texture_file, int orig_x, int orig_y)
 }
 PlayerManager::~PlayerManager() 
 {
-    delete transform;
     delete sprite;
+    delete transform;
     delete stats_bar;
 }
 void PlayerManager::Update()

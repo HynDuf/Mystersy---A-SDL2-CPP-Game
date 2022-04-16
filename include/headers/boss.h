@@ -16,6 +16,7 @@ public:
     void RenderFire();
     void DecHealth(int v);
     bool IsInsideActiveZone();
+    bool IsInsideMusicZone();
     bool IsAlive();
     int start_x, start_y;
     TransformComponent *transform;

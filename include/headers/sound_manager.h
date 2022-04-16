@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL_mixer.h>
+#include <SDL_image.h>
 class SoundManager
 {
 public:
@@ -15,14 +16,12 @@ public:
     void PlayBossBGM();
     void PlayBGM();
     bool IsPlayingBossBGM();
-    void Update();
+    void Toggle(int ty);
+    void Render();
+    void HandleToggle(bool press_K, bool press_L);
 private:
     bool is_playing_boss_bgm;
     
-    int duration_bgm = 60 * 200;
-
-    int duration_boss_bgm = 60 * 315;
-
     Mix_Music *bgm = NULL;
     Mix_Music *boss_bgm = NULL;
 
@@ -35,7 +34,18 @@ private:
     Mix_Chunk *slash = NULL;
     Mix_Chunk *player_damaged = NULL;
 
+    SDL_Texture *bgm_on;
+    SDL_Texture *bgm_off;
+    SDL_Texture *sfx_on;
+    SDL_Texture *sfx_off;
+    SDL_Texture *current;
+    int duration = 0;
+    bool is_bgm_on = true;
+    bool is_sfx_on = true;
+    SDL_Rect dest;
 
+    bool last_press_K = false;
+    bool last_press_L = false;
 };
 
 extern SoundManager *sound_manager;

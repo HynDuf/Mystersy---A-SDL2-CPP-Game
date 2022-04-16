@@ -25,6 +25,8 @@ PlayerSkillQ::~PlayerSkillQ()
 {
     delete transform;
     delete sprite;
+    SDL_DestroyTexture(circle_on);
+    SDL_DestroyTexture(circle_off);
 }
 
 void PlayerSkillQ::Update()

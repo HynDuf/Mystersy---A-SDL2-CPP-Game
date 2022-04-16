@@ -54,7 +54,7 @@ void Boss::Update()
         if (--skill_duration == 0)
         {
             ExecuteSkill();
-            skill_duration = 500;
+            skill_duration = 400;
             (cur_skill += 1) %= 4;
         }
     }
@@ -64,14 +64,18 @@ void Boss::Update()
 }
 void Boss::Render()
 {
-    if (!IsInsideActiveZone() || !IsAlive()) 
+    if (!IsInsideMusicZone())
     {
         if (sound_manager->IsPlayingBossBGM() == true)
-        sound_manager->PlayBGM();
-        return;
+            sound_manager->PlayBGM();
+    } else 
+    {
+        if (sound_manager->IsPlayingBossBGM() == false)
+            sound_manager->PlayBossBGM();
     }
-    if (sound_manager->IsPlayingBossBGM() == false)
-        sound_manager->PlayBossBGM();
+    if (!IsInsideActiveZone() || !IsAlive()) 
+        return;
+    
     sprite->Draw(-player->xdif, -player->ydif);
     health_bar->Draw(-player->xdif, -player->ydif);
 }
@@ -93,7 +97,12 @@ bool Boss::IsInsideActiveZone()
     int y = transform->y - player->ydif;
     return (-100 < x && x < 900 && -100 < y && y < 700);
 }
-
+bool Boss::IsInsideMusicZone()
+{
+    int x = transform->x - player->xdif;
+    int y = transform->y - player->ydif;
+    return (-500 < x && x < 1300 && -500 < y && y < 1100);
+}
 void Boss::AddAnimations()
 {
     Animation walk_left(0, 45, 40, 2, 350);
@@ -106,7 +115,7 @@ void Boss::DecHealth(int v)
 {
     health -= v;
     health_bar->Reset(health);
-    if (health < 1000)
+    if (health < 2500)
         rage_mode = true;
 }
 
@@ -158,9 +167,9 @@ void Boss::ExecuteSpawnMonster()
 {
     for (int i = 0; i < skill_spawn.number; i++)
     {
-        if (enemy_generator->bat_container.size() < 25) 
+        if (enemy_generator->bat_container.size() < 30) 
             enemy_generator->AddNewBat(transform->x + 40, transform->y + 40);
-        if (enemy_generator->skeleton_container.size() < 25) 
+        if (enemy_generator->skeleton_container.size() < 30) 
             enemy_generator->AddNewSkeleton(transform->x + 40, transform->y + 40);
     }
 }

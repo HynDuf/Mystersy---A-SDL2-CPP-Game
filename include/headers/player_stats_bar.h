@@ -24,8 +24,8 @@ public:
     SDL_Rect box_heart;
     SDL_Rect box_xp;
     SDL_Color Black = {255, 255, 255};
-    SDL_Surface* surface;
-    SDL_Texture* HP;
-    SDL_Texture* XP;
+    SDL_Surface* surface = NULL;
+    SDL_Texture* HP = NULL;
+    SDL_Texture* XP = NULL;
 
 };

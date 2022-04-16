@@ -16,8 +16,8 @@ LevelManager::LevelManager()
     delta_xp = 5;
     delta_attack = 0.7;
     delta_speed = 0.15;
-    delta_q_cooldown = -6;
-    delta_e_duration = 6;
+    delta_q_cooldown = -15;
+    delta_e_duration = 20;
 }
 LevelManager::~LevelManager() {}
 

@@ -198,6 +198,7 @@ void WorldMap::UpdateMap()
         player_skill_e->ExecuteSkill();
     if (Game::keyboard_state[SDL_SCANCODE_M])
         boss_guider->active = true;
+    sound_manager->HandleToggle(Game::keyboard_state[SDL_SCANCODE_K], Game::keyboard_state[SDL_SCANCODE_L]);
 }
 void WorldMap::RenderMapFullGrass()
 {

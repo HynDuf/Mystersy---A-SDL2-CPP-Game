@@ -6,7 +6,13 @@ EnemyGenerator::EnemyGenerator()
 {
     generator_interval = 200;
 }
-EnemyGenerator::~EnemyGenerator() {}
+EnemyGenerator::~EnemyGenerator() 
+{
+    for (EnemyBat *&e : bat_container)
+        delete e;
+    for (EnemySkeleton *&e : skeleton_container)
+        delete e;
+}
 
 void EnemyGenerator::AddNewSkeleton(int x, int y)
 {
@@ -67,7 +73,7 @@ void EnemyGenerator::Update()
     }
 
     std::vector<EnemySkeleton*> tmp;
-    for (EnemySkeleton *e : skeleton_container)
+    for (EnemySkeleton *&e : skeleton_container)
     {
         if (e->IsAlive() && e->IsInsideLivingZone())
         {
@@ -78,7 +84,7 @@ void EnemyGenerator::Update()
     }
     skeleton_container = std::move(tmp);
     std::vector<EnemyBat*> tmp1;
-    for (EnemyBat *e : bat_container)
+    for (EnemyBat *&e : bat_container)
     {
         if (e->IsAlive() && e->IsInsideLivingZone())
         {

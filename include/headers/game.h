@@ -11,10 +11,9 @@ public:
     Game();
     ~Game();
 
-    void Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
+    void Init();
     void HandleEvents();
     void Update();
-    void UpdateSound();
     void Render();
     void RenderGameOver();
     void RenderGameWon();
@@ -40,9 +39,9 @@ public:
 
 
     static SDL_Renderer *renderer;
+    static SDL_Window *window;
     static const Uint8 *keyboard_state;
     
 private:
     bool is_running;
-    SDL_Window *window;
 };

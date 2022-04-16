@@ -24,6 +24,8 @@ PlayerSkillE::~PlayerSkillE()
 {
     delete transform;
     delete sprite;
+    SDL_DestroyTexture(circle_on);
+    SDL_DestroyTexture(circle_off);
 }
 
 void PlayerSkillE::Update()

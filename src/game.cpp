@@ -13,11 +13,11 @@
 #include <boss_guider.h>
 #include <sound_manager.h>
 
-EnemySkeleton *enemy;
 SDL_Renderer *Game::renderer = nullptr;
+SDL_Window *Game::window = nullptr;
 Game::Game() {}
 Game::~Game() {}
-const Uint8 *Game::keyboard_state = SDL_GetKeyboardState(NULL);
+
 WorldMap *map;
 PlayerManager *player;
 PlayerSkillQ *player_skill_q;
@@ -29,37 +29,8 @@ Shooter *shooter;
 Boss *boss;
 BossGuider *boss_guider;
 SoundManager *sound_manager;
-void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
+void Game::Init()
 {
-    int screen_mode = (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN);
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        printf("SDL Failed Initializing...");
-        is_running = false;
-        return;
-    }
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-    {
-        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-        is_running = false;
-        return;
-    }
-
-    if (TTF_Init() == -1)
-    {
-        printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-        is_running = false;
-        return;
-    }
-
-    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
-    {
-        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-        return;    
-    }
-    window = SDL_CreateWindow(title, xpos, ypos, width, height, screen_mode);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     is_running = true;
     player = new PlayerManager("img/player/player.png", 365, 300);
     player_skill_q = new PlayerSkillQ();
@@ -119,6 +90,7 @@ void Game::Render()
     player_skill_e->Render();
     arrow_direction->Render();
     boss_guider->Render();
+    sound_manager->Render();
 
     if (Lost())
         RenderGameOver();
@@ -141,7 +113,7 @@ void Game::RenderGameOver()
     dest_rect_tmp.x = 157;
     dest_rect_tmp.y = 420;
     dest_rect_tmp.w = 490;
-    dest_rect_tmp.h = 35;
+    dest_rect_tmp.h = 490;
     TextureManager::Draw(texture, dest_rect_tmp);
 }
 void Game::RenderGameWon()
@@ -158,7 +130,7 @@ void Game::RenderGameWon()
     dest_rect_tmp.x = 170;
     dest_rect_tmp.y = 355;
     dest_rect_tmp.w = 490;
-    dest_rect_tmp.h = 35;
+    dest_rect_tmp.h = 490;
     TextureManager::Draw(texture, dest_rect_tmp);
 }
 
@@ -270,10 +242,17 @@ void Game::RenderGuide()
     TextureManager::Draw(title, dest);
 
     title = TextureManager::LoadTexture("img/game/instructions.png");
-    dest.x = 300;
+    dest.x = 280;
     dest.y = 35;
     dest.w = 500;
     dest.h = 550;
+    TextureManager::Draw(title, dest);
+
+    title = TextureManager::LoadTexture("img/game/return_to_menu.png");
+    dest.x = 280;
+    dest.y = 580;
+    dest.w = 250;
+    dest.h = 250;
     TextureManager::Draw(title, dest);
     SDL_RenderPresent(renderer);
 }
@@ -286,19 +265,8 @@ bool Game::Lost()
 {
     return is_running == false;
 }
-void Game::UpdateSound()
-{
-    sound_manager->Update();
-}
 void Game::Clean()
-{
-    SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(renderer);
-    SDL_Quit();
-    IMG_Quit();
-    TTF_Quit();
-    Mix_CloseAudio();
-    Mix_Quit();
+{   
     delete map;
     delete player;
     delete player_skill_q;
