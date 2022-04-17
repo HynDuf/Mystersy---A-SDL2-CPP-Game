@@ -84,7 +84,7 @@ void WorldMap::UpdateMap()
         sound_manager->PlaySlash();
         return;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_W])
+    if (Game::keyboard_state[SDL_SCANCODE_LEFT] && Game::keyboard_state[SDL_SCANCODE_UP])
     {
         dir = {-1, -1};
         player->direction = 0;
@@ -93,7 +93,7 @@ void WorldMap::UpdateMap()
         player->ydif -= static_cast<int> (player->transform->speed);
         goto Finished;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_W])
+    if (Game::keyboard_state[SDL_SCANCODE_RIGHT] && Game::keyboard_state[SDL_SCANCODE_UP])
     {
         dir = {1, -1};
         player->direction = 1;
@@ -102,7 +102,7 @@ void WorldMap::UpdateMap()
         player->ydif -= static_cast<int> (player->transform->speed);
         goto Finished;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_A] && Game::keyboard_state[SDL_SCANCODE_S])
+    if (Game::keyboard_state[SDL_SCANCODE_LEFT] && Game::keyboard_state[SDL_SCANCODE_DOWN])
     {
         dir = {-1, 1};
         player->direction = 0;
@@ -111,7 +111,7 @@ void WorldMap::UpdateMap()
         player->ydif += static_cast<int> (player->transform->speed);
         goto Finished;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_D] && Game::keyboard_state[SDL_SCANCODE_S])
+    if (Game::keyboard_state[SDL_SCANCODE_RIGHT] && Game::keyboard_state[SDL_SCANCODE_DOWN])
     {
         dir = {1, 1};
         player->direction = 1;
@@ -120,19 +120,19 @@ void WorldMap::UpdateMap()
         player->ydif += static_cast<int> (player->transform->speed);
         goto Finished;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_W])
+    if (Game::keyboard_state[SDL_SCANCODE_UP])
     {
         dir = {0, -1};
         player->ydif -= static_cast<int> (player->transform->speed);
         goto Next;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_S])
+    if (Game::keyboard_state[SDL_SCANCODE_DOWN])
     {
         dir = {0, 1};
         player->ydif += static_cast<int> (player->transform->speed);
         goto Next;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_A])
+    if (Game::keyboard_state[SDL_SCANCODE_LEFT])
     {
         dir = {-1, 0};
         player->direction = 0;
@@ -140,7 +140,7 @@ void WorldMap::UpdateMap()
         player->xdif -= static_cast<int> (player->transform->speed);
         goto Finished;
     }
-    if (Game::keyboard_state[SDL_SCANCODE_D])
+    if (Game::keyboard_state[SDL_SCANCODE_RIGHT])
     {
         dir = {1, 0};
         player->direction = 1;
@@ -196,9 +196,9 @@ void WorldMap::UpdateMap()
         player_skill_q->ExecuteSkill(arrow_direction->dx, arrow_direction->dy);
     if (Game::keyboard_state[SDL_SCANCODE_E])
         player_skill_e->ExecuteSkill();
-    if (Game::keyboard_state[SDL_SCANCODE_M])
+    if (Game::keyboard_state[SDL_SCANCODE_A])
         boss_guider->active = true;
-    sound_manager->HandleToggle(Game::keyboard_state[SDL_SCANCODE_K], Game::keyboard_state[SDL_SCANCODE_L]);
+    sound_manager->HandleToggle(Game::keyboard_state[SDL_SCANCODE_S], Game::keyboard_state[SDL_SCANCODE_D]);
 }
 void WorldMap::RenderMapFullGrass()
 {
