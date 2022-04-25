@@ -16,6 +16,7 @@ public:
     void UpdateMap();
     void RenderMap();
     void RenderMapFullGrass();
+    bool IsValidMove(const std::pair<int, int> &dir);
 
     /**
      * @brief When generating map the FIRST TIME, 
