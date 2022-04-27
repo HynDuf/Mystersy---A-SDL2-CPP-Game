@@ -147,15 +147,9 @@ int PlayGame()
         game->Update(); 
         game->Render();
         if (game->Lost())
-        {
-            std::cout << "Game Over!\n";
             break;
-        }
         if (game->Won())
-        {
-            std::cout << "Game Won\n";
             break;
-        }
         frame_time = SDL_GetTicks() - frame_start;
         if (frame_time < FRAME_MAX_DELAY)
         {

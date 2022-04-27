@@ -278,6 +278,5 @@ void Game::Clean()
     delete boss;
     delete boss_guider;
     delete sound_manager;
-    std::cout << "Game cleaned" << std::endl;
 }
 
