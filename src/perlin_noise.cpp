@@ -1,4 +1,5 @@
 #include <perlin_noise.h>
+#include <ctime>
 
 PerlinNoise::PerlinNoise() 
 {
